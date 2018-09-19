@@ -5,10 +5,6 @@
 #include <sys/socket.h>
 #include <pthread.h>
 
-#define SERVER "127.0.0.1"
-#define BUFLEN 512  // Max length of buffer
-#define PORT 8888   // The port on which to send data
-
 #define QUEUE_SIZE 93     // Tamanho das filas dos roteadores
 #define MESSAGE_SIZE 100  // Mensagens são limitadas a 100 caracteres
 #define N_ROT 7           // Número de roteadores
@@ -27,10 +23,10 @@ typedef struct{
 typedef struct{
   int origin, destination;
   int cost;
-  int adj[N_ROT];
+  int path[N_ROT];
 }table;
 
-int int main() {
+int int main(){
   int tab_rot[N_ROT][N_ROT];
 
   return 0;
