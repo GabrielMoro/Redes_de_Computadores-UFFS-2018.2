@@ -11,6 +11,7 @@
 
 #define QUEUE_SIZE 93     // Tamanho das filas dos roteadores
 #define MESSAGE_SIZE 100  // Mensagens são limitadas a 100 caracteres
+#define N_ROT 7           // Número de roteadores
 
 typedef struct{
   int id, port;
@@ -21,11 +22,12 @@ typedef struct{
 typedef struct{
   int source, destination, type;    // Header
   char content[100];                // Mensagem
-}package
+}package;
 
 typedef struct{
   int origin, destination;
   int cost;
+  int adj[N_ROT];
 }table;
 
 int int main() {
