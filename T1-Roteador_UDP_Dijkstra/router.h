@@ -7,7 +7,7 @@
 
 #define QUEUE_SIZE 93     // Tamanho das filas dos roteadores
 #define MESSAGE_SIZE 100  // Mensagens são limitadas a 100 caracteres
-#define N_ROT 7           // Número de roteadores
+#define N_ROT 6           // Número de roteadores
 
 typedef struct{           // Estrutura dos roteadores
   int id, port;
