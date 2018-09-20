@@ -50,7 +50,7 @@ int main(){
   int tab_rot[N_ROT][N_ROT];
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
-
+  
   create_router(0);
   printf("\n");
   create_links(tab_rot);
