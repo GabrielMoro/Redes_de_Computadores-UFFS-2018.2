@@ -43,7 +43,7 @@ void create_links(int tab[N_ROT][N_ROT]){
 }
 
 void dijkstra(){
-  
+
 }
 
 int main(){
