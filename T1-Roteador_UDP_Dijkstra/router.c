@@ -42,18 +42,29 @@ void create_links(int tab[N_ROT][N_ROT]){
   }
 }
 
-void dijkstra(){
+void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
+  int open[N_ROT], dist[N_ROT], prev[N_ROT];    // Vércices ainda não visitados, distâncias e anteriores
+  int aux_s = start, nrot = N_ROT;
 
+  memset(dist, 1123456, sizeof(int) * nrot);
+  memset(prev, -1, sizeof(int) * nrot);
+  memset(open, 1123456, sizeof(int) * nrot);
 }
 
 int main(){
   int tab_rot[N_ROT][N_ROT];
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
-  
+
   create_router(0);
   printf("\n");
   create_links(tab_rot);
+
+  int aux = 0;
+  while(aux < N_ROT){
+    dijkstra(tab_rot, i);
+    i++;
+  }
 
   return 0;
 }
