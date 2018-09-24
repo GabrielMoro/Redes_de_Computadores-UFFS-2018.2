@@ -62,8 +62,8 @@ int main(){
 
   int aux = 0;
   while(aux < N_ROT){
-    dijkstra(tab_rot, i);
-    i++;
+    dijkstra(tab_rot, aux);
+    aux++;
   }
 
   return 0;
