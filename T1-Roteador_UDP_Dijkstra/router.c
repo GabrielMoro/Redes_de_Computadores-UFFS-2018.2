@@ -85,25 +85,35 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
 
   while(nrot >= 0){
     for(int i = 0; i < N_ROT; i++){
-      printf("i = %d\n", i);
-      printf("1. tab_rot[aux_s][i] = %d\n", tab_rot[aux_s][i]);
-      printf("2. verify(open, i) = %d\n", verify(open, i));
-      printf("3. dist[i] = %d > tab_rot[aux_s][i] + dist[aux_s] = %d\n", dist[i], tab_rot[aux_s][i] + dist[aux_s]);
+      #ifdef DEBUG
+        printf("i = %d\n", i);
+        printf("1. tab_rot[aux_s][i] = %d\n", tab_rot[aux_s][i]);
+        printf("2. verify(open, i) = %d\n", verify(open, i));
+        printf("3. dist[i] = %d > tab_rot[aux_s][i] + dist[aux_s] = %d\n", dist[i], tab_rot[aux_s][i] + dist[aux_s]);
+      #endif
       if (tab_rot[aux_s][i] > 0 && verify(open, i) && (dist[i] > (tab_rot[aux_s][i] + dist[aux_s]))){
         dist[i] = tab_rot[aux_s][i] + dist[aux_s];
-        printf("4. new dist[i] = %d\n", dist[i]);
         prev[i] = aux_s;
-        printf("5. prev[i] = %d\n", prev[i]);
+        #ifdef DEGUB
+          printf("4. new dist[i] = %d\n", dist[i]);
+          printf("5. prev[i] = %d\n", prev[i]);
+        #endif
       }
       printf("\n");
     }
     removev(open, aux_s);
-    printf("removi aux_s = %d\n", aux_s);
+    #ifdef DEGUB
+      printf("removi aux_s = %d\n", aux_s);
+    #endif
     nrot--;
     aux_s = findsminor(dist, open);
-    printf("aux_s dps de findsminor = %d\n\n\n", aux_s);
+    #ifdef DEGUB
+      printf("aux_s dps de findsminor = %d\n\n\n", aux_s);
+    #endif
   }
-  printf("\n\nIndo pro BT\n");
+  #ifdef DEGUB
+    printf("\n\nIndo pro BT\n");
+  #endif
   backtracking(start, prev);
 }
 
@@ -111,26 +121,34 @@ void backtracking(int start, int prev[N_ROT]){
   int a, x = 0, aux = 0, destination =  N_ROT - 1, path[N_ROT];
 
   while(aux < N_ROT){
-    printf("\n1. Entrei no while numero = %d\n", aux);
     a = aux;
-    printf("2. destination %d != start %d\n", destination, start);
+    #ifdef DEGUB
+      printf("\n1. Entrei no while numero = %d\n", aux);
+      printf("2. destination %d != start %d\n", destination, start);
+    #endif
     while(destination != start){
       destination = a;
-      printf("3. destination = %d\n", destination);
       path[x] = destination;
-      printf("4. x = %d\n", x);
-      printf("5. path[x] = %d\n", path[x]);
+      #ifdef DEGUB
+        printf("3. destination = %d\n", destination);
+        printf("4. x = %d\n", x);
+        printf("5. path[x] = %d\n", path[x]);
+        printf("6. prev = %d\n\n", prev[destination]);
+      #endif
       x++;
-      printf("6. prev = %d\n\n", prev[destination]);
       a = prev[destination];
     }
-    printf("sai do while 2.0\n");
+    #ifdef DEGUB
+      printf("sai do while 2.0\n");
+    #endif
 
     for(int i = x - 1, y = 0; i >= 0; i--, y++)
       r_table[count_table].path[y] = path[i];
-    for(int i = x - 1, y = 0; i >= 0; i--, y++)
+    #ifdef DEGUB
+      for(int i = x - 1, y = 0; i >= 0; i--, y++)
       printf("->%d", r_table[count_table].path[y]);
-    printf("\n");
+      printf("\n");
+    #endif
 
     count_table++;
     x = 0;
