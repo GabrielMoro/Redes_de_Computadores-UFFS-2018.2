@@ -42,13 +42,54 @@ void create_links(int tab[N_ROT][N_ROT]){
   }
 }
 
+int verify(int *v, int value){
+  for(int i = 0; i < N_ROT; i++)
+    if(v[i] == value)
+      return 1;
+  return 0;
+}
+
+void removev(int *v, int value){
+  for(int i = 0; i < N_ROT; i++)
+    if(v[i] == value)
+      v[i] = 0;
+}
+
+int findsminor(int *v, int *open){
+  int aux = 0, minor = 1123456;
+
+  for(int = 0; i < N_ROT; i++)
+    if(v[i] != 0 && v[i] < minor && verify(open, a)){
+      minor = v[i];
+      aux = i;
+    }
+
+  return aux;
+}
+
 void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
   int open[N_ROT], dist[N_ROT], prev[N_ROT];    // Vércices ainda não visitados, distâncias e anteriores
-  int aux_s = start, nrot = N_ROT;
+  int aux_s = start, nrot = N_ROT;   //HELP: AUX_S É O A, NROT É O CONTROLE
 
   memset(dist, 1123456, sizeof(int) * nrot);
   memset(prev, -1, sizeof(int) * nrot);
   memset(open, 1123456, sizeof(int) * nrot);
+
+  dist[start] = 0;
+
+  while(nrot >= 0){
+    for(int i = 0; i < N_ROT; i++){
+      if (tab_rot[aux_s][i] > 0 && verify(open, i) && (dist[b] > (tab_rot[aux_s][i] + dist[aux_s]))){
+        dist[i] = tab_rot[aux_s][i] + dist[aux_s];
+        prev[i] = aux_s;
+      }
+    }
+    removev(open, aux_s);
+    nrot--;
+    aux_s = findsminor(dist, open);
+  }
+
+  //backtracking(passa inicial, e passa vetor de anteriores)
 }
 
 int main(){
