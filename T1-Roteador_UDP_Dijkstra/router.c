@@ -4,6 +4,7 @@
 
 Router router[N_ROT];
 Table r_table[N_ROT];
+int count_table = 0;
 
 void create_router(int r_ID){
   FILE *file = fopen("roteador.config", "r");
@@ -52,14 +53,14 @@ int verify(int *v, int value){
 void removev(int *v, int value){
   for(int i = 0; i < N_ROT; i++)
     if(v[i] == value)
-      v[i] = 0;
+      v[i] = -1;
 }
 
 int findsminor(int *v, int *open){
   int aux = 0, minor = 1123456;
 
-  for(int = 0; i < N_ROT; i++)
-    if(v[i] != 0 && v[i] < minor && verify(open, a)){
+  for(int i = 0; i < N_ROT; i++)
+    if(v[i] != 0 && v[i] < minor && verify(open, i)){
       minor = v[i];
       aux = i;
     }
@@ -71,27 +72,71 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
   int open[N_ROT], dist[N_ROT], prev[N_ROT];    // Vércices ainda não visitados, distâncias e anteriores
   int aux_s = start, nrot = N_ROT;   //HELP: AUX_S É O A, NROT É O CONTROLE
 
-  memset(dist, 1123456, sizeof(int) * nrot);
-  memset(prev, -1, sizeof(int) * nrot);
+  //memset(dist, 11234, sizeof(int) * nrot);
+  //memset(prev, -1, sizeof(int) * nrot);
 
-  for(int i = 0; i < nrot; i++)
+  for(int i = 0; i < nrot; i++){
     open[i] = i;
+    prev[i] = i;
+    dist[i] = 112345;
+  }
 
   dist[start] = 0;
 
   while(nrot >= 0){
     for(int i = 0; i < N_ROT; i++){
-      if (tab_rot[aux_s][i] > 0 && verify(open, i) && (dist[b] > (tab_rot[aux_s][i] + dist[aux_s]))){
+      printf("i = %d\n", i);
+      printf("1. tab_rot[aux_s][i] = %d\n", tab_rot[aux_s][i]);
+      printf("2. verify(open, i) = %d\n", verify(open, i));
+      printf("3. dist[i] = %d > tab_rot[aux_s][i] + dist[aux_s] = %d\n", dist[i], tab_rot[aux_s][i] + dist[aux_s]);
+      if (tab_rot[aux_s][i] > 0 && verify(open, i) && (dist[i] > (tab_rot[aux_s][i] + dist[aux_s]))){
         dist[i] = tab_rot[aux_s][i] + dist[aux_s];
+        printf("4. new dist[i] = %d\n", dist[i]);
         prev[i] = aux_s;
+        printf("5. prev[i] = %d\n", prev[i]);
       }
+      printf("\n");
     }
     removev(open, aux_s);
+    printf("removi aux_s = %d\n", aux_s);
     nrot--;
     aux_s = findsminor(dist, open);
+    printf("aux_s dps de findsminor = %d\n\n\n", aux_s);
   }
+  printf("\n\nIndo pro BT\n");
+  backtracking(start, prev);
+}
 
-  //backtracking(passa inicial, e passa vetor de anteriores)
+void backtracking(int start, int prev[N_ROT]){
+  int a, x = 0, aux = 0, destination =  N_ROT - 1, path[N_ROT];
+
+  while(aux < N_ROT){
+    printf("\n1. Entrei no while numero = %d\n", aux);
+    a = aux;
+    printf("2. destination %d != start %d\n", destination, start);
+    while(destination != start){
+      destination = a;
+      printf("3. destination = %d\n", destination);
+      path[x] = destination;
+      printf("4. x = %d\n", x);
+      printf("5. path[x] = %d\n", path[x]);
+      x++;
+      printf("6. prev = %d\n\n", prev[destination]);
+      a = prev[destination];
+    }
+    printf("sai do while 2.0\n");
+
+    for(int i = x - 1, y = 0; i >= 0; i--, y++)
+      r_table[count_table].path[y] = path[i];
+    for(int i = x - 1, y = 0; i >= 0; i--, y++)
+      printf("->%d", r_table[count_table].path[y]);
+    printf("\n");
+
+    count_table++;
+    x = 0;
+    aux++;
+    destination = aux;
+  }
 }
 
 int main(){
@@ -104,10 +149,10 @@ int main(){
   create_links(tab_rot);
 
   int aux = 0;
-  while(aux < N_ROT){
-    dijkstra(tab_rot, aux);
-    aux++;
-  }
+  //while(aux < N_ROT){
+    dijkstra(tab_rot, 0);
+    //aux++;
+  //}
 
   return 0;
 }
