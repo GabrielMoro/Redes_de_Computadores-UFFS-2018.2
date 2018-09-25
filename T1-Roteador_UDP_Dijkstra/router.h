@@ -25,3 +25,11 @@ typedef struct{                     // Estrutura das tabelas de roteamentos
   int cost[N_ROT];
   int path[N_ROT];
 }Table;
+
+void create_router(int r_ID);
+void create_links(int tab[N_ROT][N_ROT]);
+int verify(int *v, int value);
+void removev(int *v, int value);
+int findsminor(int *v, int *open);
+void dijkstra(int tab_rot[N_ROT][N_ROT], int start);
+void backtracking(int start, int prev[N_ROT]);
