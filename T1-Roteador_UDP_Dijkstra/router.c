@@ -92,6 +92,7 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
   }
 
   //backtracking(passa inicial, e passa vetor de anteriores)
+  //backtracking(start, prev);
 }
 
 int main(){
