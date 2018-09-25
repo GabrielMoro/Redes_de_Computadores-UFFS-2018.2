@@ -94,7 +94,7 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
       if (tab_rot[aux_s][i] > 0 && verify(open, i) && (dist[i] > (tab_rot[aux_s][i] + dist[aux_s]))){
         dist[i] = tab_rot[aux_s][i] + dist[aux_s];
         prev[i] = aux_s;
-        #ifdef DEGUB
+        #ifdef DEBUG
           printf("4. new dist[i] = %d\n", dist[i]);
           printf("5. prev[i] = %d\n", prev[i]);
         #endif
@@ -102,16 +102,16 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
       printf("\n");
     }
     removev(open, aux_s);
-    #ifdef DEGUB
+    #ifdef DEBUG
       printf("removi aux_s = %d\n", aux_s);
     #endif
     nrot--;
     aux_s = findsminor(dist, open);
-    #ifdef DEGUB
+    #ifdef DEBUG
       printf("aux_s dps de findsminor = %d\n\n\n", aux_s);
     #endif
   }
-  #ifdef DEGUB
+  #ifdef DEBUG
     printf("\n\nIndo pro BT\n");
   #endif
   backtracking(start, prev);
@@ -122,14 +122,14 @@ void backtracking(int start, int prev[N_ROT]){
 
   while(aux < N_ROT){
     a = aux;
-    #ifdef DEGUB
+    #ifdef DEBUG
       printf("\n1. Entrei no while numero = %d\n", aux);
       printf("2. destination %d != start %d\n", destination, start);
     #endif
     while(destination != start){
       destination = a;
       path[x] = destination;
-      #ifdef DEGUB
+      #ifdef DEBUG
         printf("3. destination = %d\n", destination);
         printf("4. x = %d\n", x);
         printf("5. path[x] = %d\n", path[x]);
@@ -138,13 +138,13 @@ void backtracking(int start, int prev[N_ROT]){
       x++;
       a = prev[destination];
     }
-    #ifdef DEGUB
+    #ifdef DEBUG
       printf("sai do while 2.0\n");
     #endif
 
     for(int i = x - 1, y = 0; i >= 0; i--, y++)
       r_table[count_table].path[y] = path[i];
-    #ifdef DEGUB
+    #ifdef DEBUG
       for(int i = x - 1, y = 0; i >= 0; i--, y++)
       printf("->%d", r_table[count_table].path[y]);
       printf("\n");
