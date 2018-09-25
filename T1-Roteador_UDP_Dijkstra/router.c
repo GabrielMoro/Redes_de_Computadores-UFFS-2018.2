@@ -73,7 +73,9 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
 
   memset(dist, 1123456, sizeof(int) * nrot);
   memset(prev, -1, sizeof(int) * nrot);
-  memset(open, 1123456, sizeof(int) * nrot);
+
+  for(int i = 0; i < nrot; i++)
+    open[i] = i;
 
   dist[start] = 0;
 
