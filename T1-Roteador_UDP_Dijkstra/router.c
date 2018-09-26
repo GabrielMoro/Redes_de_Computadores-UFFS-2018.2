@@ -1,7 +1,5 @@
 #include "router.h"
 
-#define DEBUG
-
 Router router[N_ROT];
 Table r_table[N_ROT];
 int count_table = 0;
@@ -15,8 +13,8 @@ void create_router(int r_ID){
     fclose(file);
 
     #ifdef DEBUG
-    for(int i = 0; i < N_ROT; i++)
-      printf("%d %d %s\n", router[i].id, router[i].port, router[i].ip);
+      for(int i = 0; i < N_ROT; i++)
+        printf("%d %d %s\n", router[i].id, router[i].port, router[i].ip);
     #endif
   }
 }
@@ -99,7 +97,9 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
           printf("5. prev[i] = %d\n", prev[i]);
         #endif
       }
-      printf("\n");
+      #ifdef DEBUG
+        printf("\n");
+      #endif
     }
     removev(open, aux_s);
     #ifdef DEBUG
@@ -120,6 +120,9 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
 void backtracking(int start, int prev[N_ROT]){
   int a, x = 0, aux = 0, destination =  N_ROT - 1, path[N_ROT];
 
+  if(destination == start)
+    destination = 0;
+
   while(aux < N_ROT){
     a = aux;
     #ifdef DEBUG
@@ -130,7 +133,7 @@ void backtracking(int start, int prev[N_ROT]){
       destination = a;
       path[x] = destination;
       #ifdef DEBUG
-        printf("3. destination = %d\n", destination);
+        printf("3. destination = %d \n", destination);
         printf("4. x = %d\n", x);
         printf("5. path[x] = %d\n", path[x]);
         printf("6. prev = %d\n\n", prev[destination]);
@@ -144,7 +147,7 @@ void backtracking(int start, int prev[N_ROT]){
 
     for(int i = x - 1, y = 0; i >= 0; i--, y++)
       r_table[count_table].path[y] = path[i];
-    #ifdef DEBUG
+    #ifndef DEBUG
       for(int i = x - 1, y = 0; i >= 0; i--, y++)
         printf("->%d", r_table[count_table].path[y]);
       printf("\n");
@@ -167,10 +170,10 @@ int main(){
   create_links(tab_rot);
 
   int aux = 0;
-  /*while(aux < N_ROT){
-    dijkstra(tab_rot, 0);
+  while(aux < N_ROT){
+    dijkstra(tab_rot, aux);
     aux++;
-  */}
+  }
 
   return 0;
 }
