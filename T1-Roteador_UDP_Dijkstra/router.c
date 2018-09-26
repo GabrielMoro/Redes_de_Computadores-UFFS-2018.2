@@ -34,11 +34,11 @@ void create_links(int tab[N_ROT][N_ROT]){
     fclose(file);
 
     #ifdef DEBUG
-    for(int i = 0; i < N_ROT; i++){
-      for (int j = 0; j < N_ROT; j++)
-        printf("%2d ", tab[i][j]);
-      printf("\n");
-    }
+      for(int i = 0; i < N_ROT; i++){
+        for (int j = 0; j < N_ROT; j++)
+          printf("%2d ", tab[i][j]);
+        printf("\n");
+      }
     #endif
   }
 }
@@ -146,7 +146,7 @@ void backtracking(int start, int prev[N_ROT]){
       r_table[count_table].path[y] = path[i];
     #ifdef DEBUG
       for(int i = x - 1, y = 0; i >= 0; i--, y++)
-      printf("->%d", r_table[count_table].path[y]);
+        printf("->%d", r_table[count_table].path[y]);
       printf("\n");
     #endif
 
@@ -167,10 +167,10 @@ int main(){
   create_links(tab_rot);
 
   int aux = 0;
-  //while(aux < N_ROT){
+  /*while(aux < N_ROT){
     dijkstra(tab_rot, 0);
-    //aux++;
-  //}
+    aux++;
+  */}
 
   return 0;
 }
