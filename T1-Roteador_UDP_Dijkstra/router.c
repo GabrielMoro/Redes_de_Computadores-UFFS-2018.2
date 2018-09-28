@@ -118,7 +118,7 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
 }
 
 void backtracking(int start, int prev[N_ROT]){
-  int a, x = 0, aux = 0, destination =  N_ROT - 1, path[N_ROT];
+  int a, x = 0, aux = 0, destination =  N_ROT - 1, path[N_ROT], flag = 0;
 
   if(destination == start)
     destination = 0;
@@ -129,7 +129,7 @@ void backtracking(int start, int prev[N_ROT]){
       printf("\n1. Entrei no while numero = %d\n", aux);
       printf("2. destination %d != start %d\n", destination, start);
     #endif
-    while(destination != start){
+    while(destination != start && !flag){
       destination = a;
       path[x] = destination;
       #ifdef DEBUG
@@ -139,6 +139,10 @@ void backtracking(int start, int prev[N_ROT]){
         printf("6. prev = %d\n\n", prev[destination]);
       #endif
       printf("aux = %d | start = %d | destination = %d | prev[destination] = %d | x = %d | path[x] = %d\n", aux, start, destination, prev[destination], x, path[x]);
+      if(prev[destination] == start){
+        printf("%d == %d | %d", prev[destination], start, path[x]);
+        flag = 1;
+      }
       x++;
       a = prev[destination];
     }
