@@ -154,7 +154,7 @@ void backtracking(int start, int prev[N_ROT]){
     #endif
 
     for(int i = 0; i < N_ROT; i++)
-      printf("r_table[start].path[N_ROT] | r_table[%d].path[%d] = %d\n" start, i, r_table[start].path[i]);
+      printf("r_table[start].path[N_ROT] | r_table[%d].path[%d] = %d\n", start, i, r_table[start].path[i]);
     //for(int i = x - 1, y = 0; i >= 0; i--, y++)
       //r_table[count_table].path[y] = path[i];
     //#ifndef DEBUG
