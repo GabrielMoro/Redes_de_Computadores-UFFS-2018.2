@@ -186,5 +186,10 @@ int main(){
     aux++;
   }
 
+  printf("\n\n\n\n");
+  for(int i = 0; i < N_ROT; i++)
+    for(int j = 0; j < N_ROT; j++)
+      printf("r_table[start].path[ROT] | r_table[%d].path[%d] = %d\n", i, j, r_table[i].path[j]);
+
   return 0;
 }
