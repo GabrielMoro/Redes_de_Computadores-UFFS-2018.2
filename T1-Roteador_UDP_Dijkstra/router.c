@@ -141,6 +141,7 @@ void backtracking(int start, int prev[N_ROT]){
       printf("aux = %d | start = %d | destination = %d | prev[destination] = %d | x = %d | path[x] = %d\n", aux, start, destination, prev[destination], x, path[x]);
       if(prev[destination] == start){
         printf("%d == %d | %d\n", prev[destination], start, path[x]);
+        r_table[start].path[aux] = path[x];
         flag = 1;
       }
       x++;
@@ -152,13 +153,15 @@ void backtracking(int start, int prev[N_ROT]){
       printf("sai do while 2.0\n");
     #endif
 
-    for(int i = x - 1, y = 0; i >= 0; i--, y++)
-      r_table[count_table].path[y] = path[i];
-    #ifndef DEBUG
-      for(int i = x - 1, y = 0; i >= 0; i--, y++)
-        printf("->%d", r_table[count_table].path[y]);
-      printf("\n");
-    #endif
+    for(int i = 0; i < N_ROT; i++)
+      printf("r_table[start].path[N_ROT] | r_table[%d].path[%d] = %d\n" start, i, r_table[start].path[i]);
+    //for(int i = x - 1, y = 0; i >= 0; i--, y++)
+      //r_table[count_table].path[y] = path[i];
+    //#ifndef DEBUG
+      //for(int i = x - 1, y = 0; i >= 0; i--, y++)
+        //printf("->%d", r_table[count_table].path[y]);
+      //printf("\n");
+    //#endif
 
     count_table++;
     x = 0;
