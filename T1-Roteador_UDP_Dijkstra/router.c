@@ -148,6 +148,8 @@ void backtracking(int start, int prev[N_ROT]){
       x++;
       a = prev[destination];
     }
+    if(destination == start)
+      r_table[start].path[destination] = start;
     #ifdef DEBUG
       printf("sai do while 2.0\n");
     #endif
