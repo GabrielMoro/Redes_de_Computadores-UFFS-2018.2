@@ -68,10 +68,7 @@ int findsminor(int *v, int *open){
 
 void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
   int open[N_ROT], dist[N_ROT], prev[N_ROT];    // Vércices ainda não visitados, distâncias e anteriores
-  int aux_s = start, nrot = N_ROT;   //HELP: AUX_S É O A, NROT É O CONTROLE
-
-  //memset(dist, 11234, sizeof(int) * nrot);
-  //memset(prev, -1, sizeof(int) * nrot);
+  int aux_s = start, nrot = N_ROT;
 
   for(int i = 0; i < nrot; i++){
     open[i] = i;
@@ -83,37 +80,15 @@ void dijkstra(int tab_rot[N_ROT][N_ROT], int start){
 
   while(nrot >= 0){
     for(int i = 0; i < N_ROT; i++){
-      #ifdef DEBUG
-        printf("i = %d\n", i);
-        printf("1. tab_rot[aux_s][i] = %d\n", tab_rot[aux_s][i]);
-        printf("2. verify(open, i) = %d\n", verify(open, i));
-        printf("3. dist[i] = %d > tab_rot[aux_s][i] + dist[aux_s] = %d\n", dist[i], tab_rot[aux_s][i] + dist[aux_s]);
-      #endif
       if (tab_rot[aux_s][i] > 0 && verify(open, i) && (dist[i] > (tab_rot[aux_s][i] + dist[aux_s]))){
         dist[i] = tab_rot[aux_s][i] + dist[aux_s];
         prev[i] = aux_s;
-        #ifdef DEBUG
-          printf("4. new dist[i] = %d\n", dist[i]);
-          printf("5. prev[i] = %d\n", prev[i]);
-        #endif
       }
-      #ifdef DEBUG
-        printf("\n");
-      #endif
     }
     removev(open, aux_s);
-    #ifdef DEBUG
-      printf("removi aux_s = %d\n", aux_s);
-    #endif
     nrot--;
     aux_s = findsminor(dist, open);
-    #ifdef DEBUG
-      printf("aux_s dps de findsminor = %d\n\n\n", aux_s);
-    #endif
   }
-  #ifdef DEBUG
-    printf("\n\nIndo pro BT\n");
-  #endif
   backtracking(start, prev);
 }
 
@@ -125,33 +100,18 @@ void backtracking(int start, int prev[N_ROT]){
 
   while(aux < N_ROT){
     a = aux;
-    #ifdef DEBUG
-      printf("\n1. Entrei no while numero = %d\n", aux);
-      printf("2. destination %d != start %d\n", destination, start);
-    #endif
     while(destination != start){
       destination = a;
       path[x] = destination;
-      #ifdef DEBUG
-        printf("3. destination = %d \n", destination);
-        printf("4. x = %d\n", x);
-        printf("5. path[x] = %d\n", path[x]);
-        printf("6. prev = %d\n\n", prev[destination]);
-      #endif
+      if(prev[destination] == start){
+        r_table[start].path[aux] = path[x];
+        break;
+      }
       x++;
       a = prev[destination];
     }
-    #ifdef DEBUG
-      printf("sai do while 2.0\n");
-    #endif
-
-    for(int i = x - 1, y = 0; i >= 0; i--, y++)
-      r_table[count_table].path[y] = path[i];
-    #ifndef DEBUG
-      for(int i = x - 1, y = 0; i >= 0; i--, y++)
-        printf("->%d", r_table[count_table].path[y]);
-      printf("\n");
-    #endif
+    if(destination == start)
+      r_table[start].path[destination] = start;
 
     count_table++;
     x = 0;
@@ -173,6 +133,13 @@ int main(){
   while(aux < N_ROT){
     dijkstra(tab_rot, aux);
     aux++;
+  }
+
+  printf("Mostrando qual é o proximo roteador que deve se ir para chegar ao destino desejado:\n");
+  for(int i = 0; i < N_ROT; i++){
+    for(int j = 0; j < N_ROT; j++)
+      printf("r_table[start].path[ROT] | r_table[%d].path[%d] = %d\n", i, j, r_table[i].path[j]);
+    printf("\n");
   }
 
   return 0;
