@@ -138,6 +138,7 @@ void backtracking(int start, int prev[N_ROT]){
         printf("5. path[x] = %d\n", path[x]);
         printf("6. prev = %d\n\n", prev[destination]);
       #endif
+      printf("aux = %d | start = %d | destination = %d | prev[destination] = %d | x = %d | path[x] = %d", aux, start, destination, prev[destination], x, path[x]);
       x++;
       a = prev[destination];
     }
@@ -147,7 +148,7 @@ void backtracking(int start, int prev[N_ROT]){
 
     for(int i = x - 1, y = 0; i >= 0; i--, y++)
       r_table[count_table].path[y] = path[i];
-    #ifndef DEBUG
+    #ifdef DEBUG
       for(int i = x - 1, y = 0; i >= 0; i--, y++)
         printf("->%d", r_table[count_table].path[y]);
       printf("\n");
