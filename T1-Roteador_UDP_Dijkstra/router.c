@@ -143,12 +143,10 @@ void backtracking(int start, int prev[N_ROT]){
         printf("%d == %d | %d\n", prev[destination], start, path[x]);
         r_table[start].path[aux] = path[x];
         printf("r_table[start].path[aux] = path[x] | r_table[%d].path[%d] = %d\n", start, aux, r_table[start].path[aux] = path[x]);
-        flag = 1;
+        break;
       }
       x++;
       a = prev[destination];
-      if(flag)
-        continue;
     }
     #ifdef DEBUG
       printf("sai do while 2.0\n");
