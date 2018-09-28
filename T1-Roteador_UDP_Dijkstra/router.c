@@ -142,7 +142,7 @@ void backtracking(int start, int prev[N_ROT]){
       if(prev[destination] == start){
         printf("%d == %d | %d\n", prev[destination], start, path[x]);
         r_table[start].path[aux] = path[x];
-        printf("r_table[start].path[aux] = path[x] | r_table[%d].path[%d] = %d", start, aux, r_table[start].path[aux] = path[x]);
+        printf("r_table[start].path[aux] = path[x] | r_table[%d].path[%d] = %d\n", start, aux, r_table[start].path[aux] = path[x]);
         flag = 1;
       }
       x++;
