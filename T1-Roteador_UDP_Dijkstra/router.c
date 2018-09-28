@@ -148,7 +148,7 @@ void backtracking(int start, int prev[N_ROT]){
 
     for(int i = x - 1, y = 0; i >= 0; i--, y++)
       r_table[count_table].path[y] = path[i];
-    #ifdef DEBUG
+    #ifndef DEBUG
       for(int i = x - 1, y = 0; i >= 0; i--, y++)
         printf("->%d", r_table[count_table].path[y]);
       printf("\n");
