@@ -129,7 +129,7 @@ void backtracking(int start, int prev[N_ROT]){
       printf("\n1. Entrei no while numero = %d\n", aux);
       printf("2. destination %d != start %d\n", destination, start);
     #endif
-    while(destination != start && !flag){
+    while(destination != start){
       destination = a;
       path[x] = destination;
       #ifdef DEBUG
@@ -145,6 +145,8 @@ void backtracking(int start, int prev[N_ROT]){
       }
       x++;
       a = prev[destination];
+      if(flag)
+        continue;
     }
     #ifdef DEBUG
       printf("sai do while 2.0\n");
