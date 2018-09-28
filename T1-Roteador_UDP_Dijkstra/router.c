@@ -138,7 +138,7 @@ void backtracking(int start, int prev[N_ROT]){
         printf("5. path[x] = %d\n", path[x]);
         printf("6. prev = %d\n\n", prev[destination]);
       #endif
-      printf("aux = %d | start = %d | destination = %d | prev[destination] = %d | x = %d | path[x] = %d", aux, start, destination, prev[destination], x, path[x]);
+      printf("aux = %d | start = %d | destination = %d | prev[destination] = %d | x = %d | path[x] = %d\n", aux, start, destination, prev[destination], x, path[x]);
       x++;
       a = prev[destination];
     }
