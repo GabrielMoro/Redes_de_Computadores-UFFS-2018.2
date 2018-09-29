@@ -180,6 +180,7 @@ int main(int argc, char *argv[]){
   for(int i = 0; i < N_ROT; i++){
     pathcost(i, tab_rot);
   }
+<<<<<<< HEAD
 
   memset((char *) &si_other, 0, sizeof(si_other));
   si_other.sin_family = AF_INET;
@@ -217,5 +218,8 @@ int main(int argc, char *argv[]){
     }
   }
 
+=======
+  
+>>>>>>> 97b715d0a627de0f7774b7a1451650cb4098ab73
   return 0;
 }
