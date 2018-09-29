@@ -147,7 +147,7 @@ int main(){
   printf("Mostrando qual é o proximo roteador que deve se ir para chegar ao destino desejado:\n");
   for(int i = 0; i < N_ROT; i++){
     for(int j = 0; j < N_ROT; j++)
-      printf("r_table[start].path[ROT] | r_table[%d].path[%d] = %d\n | Custo = %d", i, j, r_table[i].path[j], r_table[i].cost[j]);
+      printf("r_table[start].path[ROT] | r_table[%d].path[%d] = %d | Custo = %d\n", i, j, r_table[i].path[j], r_table[i].cost[j]);
     printf("\n");
   }
 
