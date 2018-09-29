@@ -146,7 +146,7 @@ void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
 }
 
 int main(){
-  int tab_rot[N_ROT][N_ROT], id, opt;
+  int tab_rot[N_ROT][N_ROT], id = -1, opt;
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
 
@@ -174,7 +174,7 @@ int main(){
 
   create_router(id);
 
-  // pthread_create(&thread_id, NULL, receive, NULL);
+  pthread_create(&thread_id, NULL, receive, NULL);
 
   // sleep(1);
 
