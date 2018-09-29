@@ -150,8 +150,6 @@ int main(){
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
 
-  //create_router(0);
-  printf("\n");
   create_links(tab_rot);
 
   int aux = 0;
@@ -173,6 +171,8 @@ int main(){
   si_other.sin_addr.s_addr =  htonl(INADDR_ANY);
 
   create_router(0);
+
+  pthread_create(&thread_id, NULL, receive, NULL);  
 
   return 0;
 }
