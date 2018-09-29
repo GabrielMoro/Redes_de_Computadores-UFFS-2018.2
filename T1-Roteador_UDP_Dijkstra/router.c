@@ -14,14 +14,13 @@ void die(char *s){
   exit(1);
 }
 
-/*void *receive(){
+void *receive(){
   int slen = sizeof(si_other);
 
   while(scanf("%s\n", 'q')){
     printf("Teste receive");
   }
 }
-*/
 
 void create_router(int r_ID){
   FILE *file = fopen("roteador.config", "r");
@@ -172,7 +171,7 @@ int main(){
 
   create_router(0);
 
-  pthread_create(&thread_id, NULL, receive, NULL);  
+  pthread_create(&thread_id, NULL, receive, NULL);
 
   return 0;
 }
