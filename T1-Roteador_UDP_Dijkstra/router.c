@@ -156,17 +156,19 @@ int toint(char *str){//converte pra int//função da internet
 int main(int argc, char *argv[]){
   int tab_rot[N_ROT][N_ROT], opt;
 
+  if(argc < 2)
+    die("Insira o ID do roteador!\n");
+
+  int id = toint(argv[1]);
+
   if(id < 0 || id >= N_ROT){
     printf("Intervalo de roteadores: [0, %d].\n", N_ROT - 1);
     die("ID de roteador inválido!\n");
   }
 
-  if(argc < 2)
-    die("Insira o ID do roteador!\n");
-  else if(argc > 2)
+  if(argc > 2)
     die("Insira apenas um ID para o roteador!\n");
 
-  int id = toint(argv[1]);
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
 
