@@ -28,7 +28,7 @@ typedef struct{                     // Estrutura das tabelas de roteamentos
 void die(char *s);
 void *receive(int id);
 void create_message(int id);
-void send(int this_id, int next_id);
+void send_message(int this_id, int next_id);
 void create_router(int r_ID);
 void create_links(int tab[N_ROT][N_ROT]);
 int  verify(int *v, int value);
