@@ -18,8 +18,10 @@ void *receive(int id){
   int slen = sizeof(si_other);
   int next;
 
+  Package message_in = router[id].message_in[message_control_in];
+
   while(1){
-    if((recvfrom(sckt, &router[id].message_in[message_control_in], sizeof(router[id].message_in[message_control_in]), 0, (struct sockaddr*) &si_me, &slen)) == -1){
+    if((recvfrom(sckt, &message_in, sizeof(router[id].message_in[message_control_in]), 0, (struct sockaddr*) &si_me, &slen)) == -1){
       printf("Erro ao receber mensagem!\n");
       message_control_in--;
     }else{}
