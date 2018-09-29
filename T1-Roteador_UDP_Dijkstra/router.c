@@ -176,11 +176,10 @@ int main(){
 
   sleep(1);
 
-  int x = 69;
-  while(x == 69){
+  while(1){
     scanf("%d\n", &x);
-    printf("kkk eai men");
-    sleep(1);
+    printf("kkk eai men\n");
+    sleep(5);
   }
 
   return 0;
