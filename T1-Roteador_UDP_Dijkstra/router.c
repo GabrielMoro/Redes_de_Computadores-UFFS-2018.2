@@ -83,7 +83,7 @@ void create_router(int r_ID){
   for (int i = 0; fscanf(file, "%d %d %s", &router[i].id, &router[i].port, router[i].ip) != EOF; i++);
   fclose(file);
 
-  printf("%d %d %s\n", router[i].id, router[i].port, router[i].ip);
+  printf("%d %d %s\n", router[r_ID].id, router[r_ID].port, router[r_ID].ip);
 
   if((sckt = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     die("Erro ao criar Socket\n");
