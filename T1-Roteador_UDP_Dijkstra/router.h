@@ -9,16 +9,16 @@
 #define MESSAGE_SIZE 100  // Mensagens são limitadas a 100 caracteres
 #define N_ROT 6           // Número de roteadores
 
-typedef struct{           // Estrutura dos roteadores
-  int id, port;
-  int message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];
+typedef struct{                     // Estrutura dos pacotes
+  int source, destination, id;    // Header
+  char content[MESSAGE_SIZE];       // Mensagem
+}Package;
+
+typedef struct{                                             // Estrutura dos roteadores
+  int id, port;                                             // ID e porta do roteador
+  Package message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];  // Filas do roteador
   char ip[30];
 }Router;
-
-typedef struct{                     // Estrutura dos pacotes
-  int source, destination, type;    // Header
-  char content[MESSAGE_SIZE];                // Mensagem
-}Package;
 
 typedef struct{                     // Estrutura das tabelas de roteamentos
   int cost[N_ROT];
