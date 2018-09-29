@@ -145,8 +145,28 @@ void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
   }
 }
 
-int main(){
-  int tab_rot[N_ROT][N_ROT], id = -1, opt;
+int toint(char *str){//converte pra int//função da internet
+  int i, pot, ans;
+  ans = 0;
+  for(i = strlen(str) - 1, pot = 1; i >= 0; i--, pot *= 10)
+    ans += pot * (str[i] - '0');
+  return ans;
+}
+
+int main(int argc, char *argv[]){
+  int tab_rot[N_ROT][N_ROT], opt;
+  int id = toint(argv[1]);
+
+  if(id < 0 || id >= N_ROT){
+    printf("Intervalo de roteadores: [0, %d].\n", N_ROT - 1);
+    die("ID de roteador inválido!\n");
+  }
+
+  if(argc < 2)
+    die("Insira o ID do roteador!\n");
+  else if(argc > 2)
+    die("Insira apenas um ID para o roteador!\n");
+
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
 
@@ -162,12 +182,6 @@ int main(){
     pathcost(i, tab_rot);
   }
 
-  do{
-    scanf("%d\n", &id);
-    if(id <= 0 || id > N_ROT)
-      printf("ID inválido!\nID válidos: [0, %d]\n", N_ROT - 1);
-  }while(id <= 0 || id > N_ROT);
-
   memset((char *) &si_other, 0, sizeof(si_other));
   si_other.sin_family = AF_INET;
   si_other.sin_addr.s_addr =  htonl(INADDR_ANY);
@@ -176,7 +190,7 @@ int main(){
 
   pthread_create(&thread_id, NULL, receive, NULL);
 
-  // sleep(1);
+  sleep(1);
 
   while(1){
     printf("=- ROTEADOR %d -=\n", id);
