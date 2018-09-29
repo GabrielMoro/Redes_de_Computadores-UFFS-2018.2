@@ -176,8 +176,9 @@ int main(){
 
   sleep(3);
 
-  int x;
-  while(scanf("%d\n", &x) == 69){
+  int x = 69;
+  while(x == 69){
+    scanf("%d\n", &x);
     printf("kkk eai men");
   }
 
