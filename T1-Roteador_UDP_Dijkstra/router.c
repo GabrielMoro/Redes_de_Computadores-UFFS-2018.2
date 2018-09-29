@@ -174,13 +174,13 @@ int main(){
 
   pthread_create(&thread_id, NULL, receive, NULL);
 
-  sleep(3);
+  sleep(1);
 
   int x = 69;
   while(x == 69){
     scanf("%d\n", &x);
     printf("kkk eai men");
-    sleep(5);
+    sleep(1);
   }
 
   return 0;
