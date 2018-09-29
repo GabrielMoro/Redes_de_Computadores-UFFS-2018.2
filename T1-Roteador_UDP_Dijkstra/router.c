@@ -194,7 +194,7 @@ int main(int argc, char *argv[]){
   while(1){
     system("clear");
 
-    printf("=- ROTEADOR %d -=\n", id);
+    printf("            =- ROTEADOR %d -=\n", id);
     printf("----------------------------------------\n");
     printf("0 - Ver mensagens\n");
     printf("1 - Enviar mensagem\n");
