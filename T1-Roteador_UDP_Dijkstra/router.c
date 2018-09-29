@@ -32,7 +32,7 @@ void create_router(int r_ID){
   si_me.sin_port = htons(router[r_ID].port);
   si_me.sin_addr.s_addr = htonl(INADDR_ANY);
 
-  if(bind(socket, (struct sockaddr*)&si_me, sizeof(si_me)) == -1)
+  if(bind(sckt, (struct sockaddr*)&si_me, sizeof(si_me)) == -1)
     die("Erro ao dar bind!");
 
   printf("xD");
