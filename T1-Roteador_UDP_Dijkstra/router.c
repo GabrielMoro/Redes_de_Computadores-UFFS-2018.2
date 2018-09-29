@@ -2,16 +2,40 @@
 
 Router router[N_ROT];
 Table r_table[N_ROT];
-int count_table = 0;
+
+struct sockaddr_in si_me, si_other;
+
+pthread_t thread_id;
+
+int socket;
+
+void die(char *s){
+  perror(s);
+  exit(1);
+}
 
 void create_router(int r_ID){
   FILE *file = fopen("roteador.config", "r");
 
-  if (file){
-    for (int i = 0; fscanf(file, "%d %d %s", &router[i].id, &router[i].port, router[i].ip) != EOF; i++);
+  if (!file)
+    die("Não foi possível abrir o arquivo de configuração dos roteadores!");
 
-    fclose(file);
-  }
+  for (int i = 0; fscanf(file, "%d %d %s", &router[i].id, &router[i].port, router[i].ip) != EOF; i++);
+  fclose(file);
+
+  if((socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
+    die("Erro ao criar Socket\n");
+
+  memset((char *) &si_me, 0, sizeof(si_me));
+
+  si_me.sin_family = AF_INET;
+  si_me.sin_port = htons(router[r_ID].port);
+  si_me.sin_addr.s_addr = htonl(INADDR_ANY);
+
+  if(bind(socket, (struct sockaddr*)&si_me, sizeof(si_me)) == -1)
+    die("Erro ao dar bind!");
+
+  printf("xD");
 }
 
 void create_links(int tab[N_ROT][N_ROT]){
@@ -116,7 +140,7 @@ void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
 }
 
 int main(){
-  int tab_rot[N_ROT][N_ROT];
+  int tab_rot[N_ROT][N_ROT], id;
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
 
@@ -133,6 +157,14 @@ int main(){
   for(int i = 0; i < N_ROT; i++){
     pathcost(i, tab_rot);
   }
+
+  // do{
+  //   scanf("%d\n", &id);
+  // }while(id < 0 || id > N_ROT);
+
+  memset((char *) &si_other, 0, sizeof(si_other));
+  si_other.sin_family = AF_INET;
+  si_other.sin_addr.s_addr =  htonl(INADDR_ANY)
 
   printf("Mostrando qual é o proximo roteador que se deve ir para chegar ao destino desejado e seu custo:\n");
   for(int i = 0; i < N_ROT; i++){
