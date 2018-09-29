@@ -163,7 +163,7 @@ int main(){
 
   memset((char *) &si_other, 0, sizeof(si_other));
   si_other.sin_family = AF_INET;
-  si_other.sin_addr.s_addr =  htonl(INADDR_ANY)
+  si_other.sin_addr.s_addr =  htonl(INADDR_ANY);
 
   printf("Mostrando qual é o proximo roteador que se deve ir para chegar ao destino desejado e seu custo:\n");
   for(int i = 0; i < N_ROT; i++){
