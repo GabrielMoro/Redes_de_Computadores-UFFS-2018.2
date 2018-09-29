@@ -124,7 +124,6 @@ void backtracking(int start, int prev[N_ROT]){
     if(destination == start)
       r_table[start].path[destination] = start;
 
-    count_table++;
     x = 0;
     aux++;
     destination = aux;
