@@ -122,7 +122,7 @@ void backtracking(int start, int prev[N_ROT]){
 
 void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
   for(int i = 0; i < N_ROT; i++)
-    r_table[start].cost[i] = tab_rot[start][i];
+    r_table[start].cost[i] = tab_rot[start][r_table[start].path[i]];
 }
 
 int main(){
