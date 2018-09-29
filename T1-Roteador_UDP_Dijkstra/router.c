@@ -120,6 +120,14 @@ void backtracking(int start, int prev[N_ROT]){
   }
 }
 
+void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
+  for(int i = 0; i < N_ROT; i++){
+    r_table[start].cost[i] = tab_rot[start][r_table[start].path[i]];
+    if(start == i)
+      r_table[start].cost[i] = 0;
+  }
+}
+
 int main(){
   int tab_rot[N_ROT][N_ROT];
 
@@ -135,10 +143,14 @@ int main(){
     aux++;
   }
 
-  printf("Mostrando qual é o proximo roteador que deve se ir para chegar ao destino desejado:\n");
+  for(int i = 0; i < N_ROT; i++){
+    pathcost(i, tab_rot);
+  }
+
+  printf("Mostrando qual é o proximo roteador que se deve ir para chegar ao destino desejado e seu custo:\n");
   for(int i = 0; i < N_ROT; i++){
     for(int j = 0; j < N_ROT; j++)
-      printf("r_table[start].path[ROT] | r_table[%d].path[%d] = %d\n", i, j, r_table[i].path[j]);
+      printf("r_table[start].path[ROT] | r_table[%d].path[%d] = %d | Custo = %d\n", i, j, r_table[i].path[j], r_table[i].cost[j]);
     printf("\n");
   }
 
