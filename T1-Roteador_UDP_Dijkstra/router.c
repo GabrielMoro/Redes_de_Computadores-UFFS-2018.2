@@ -177,7 +177,7 @@ int main(){
   sleep(1);
 
   while(1){
-    scanf("%d\n", &x);
+    //scanf("%d\n", &x);
     printf("kkk eai men\n");
     sleep(5);
   }
