@@ -15,11 +15,11 @@ void die(char *s){
 }
 
 void *receive(int id){
-  //int slen = sizeof(si_other);
+  int slen = sizeof(si_other);
   int next;
 
   while(1){
-    if(recvfrom(sckt, &router[id].message_in[message_control_in], sizeof(router[id].message_in[message_control_in]), 0, (struct sockaddr*) &si_me, sizeof(si_other)) == -1){
+    if((recvfrom(sckt, &router[id].message_in[message_control_in], sizeof(router[id].message_in[message_control_in]), 0, (struct sockaddr*) &si_me, &slen)) == -1){
       printf("Erro ao receber mensagem!\n");
       message_control_in--;
     }else{}
