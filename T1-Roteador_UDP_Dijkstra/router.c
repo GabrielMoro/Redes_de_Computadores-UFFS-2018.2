@@ -146,7 +146,7 @@ void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
 }
 
 int main(){
-  int tab_rot[N_ROT][N_ROT], id;
+  int tab_rot[N_ROT][N_ROT], id, opt;
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
 
@@ -162,9 +162,9 @@ int main(){
     pathcost(i, tab_rot);
   }
 
-  // do{
-  //   scanf("%d\n", &id);
-  // }while(id < 0 || id > N_ROT);
+  do{
+    scanf("%d\n", &id);
+  }while(id <= 0 || id > N_ROT);
 
   memset((char *) &si_other, 0, sizeof(si_other));
   si_other.sin_family = AF_INET;
@@ -177,9 +177,11 @@ int main(){
   sleep(1);
 
   while(1){
-    //scanf("%d\n", &x);
-    printf("kkk eai men\n");
-    sleep(5);
+    printf("=- ROTEADOR %d -=\n", id);
+    sleep(10);
+    //printf("----------------------------------------\n");
+    //printf("");
+    //scanf("%d\n", &opt);
   }
 
   return 0;
