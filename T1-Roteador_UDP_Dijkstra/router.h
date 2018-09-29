@@ -21,7 +21,6 @@ typedef struct{                     // Estrutura dos pacotes
 }Package;
 
 typedef struct{                     // Estrutura das tabelas de roteamentos
-  int origin, destination;
   int cost[N_ROT];
   int path[N_ROT];
 }Table;
