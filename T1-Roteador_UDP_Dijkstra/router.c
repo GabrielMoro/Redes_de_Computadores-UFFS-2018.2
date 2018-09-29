@@ -16,8 +16,9 @@ void die(char *s){
 
 void *receive(){
   int slen = sizeof(si_other);
-
-  while(scanf("%s\n", 'q')){
+  char a;
+  
+  while(scanf("%c\n", &a) == 'q'){
     printf("Teste receive");
   }
 }
