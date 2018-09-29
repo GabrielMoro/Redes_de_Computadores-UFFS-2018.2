@@ -7,7 +7,7 @@ struct sockaddr_in si_me, si_other;
 
 pthread_t thread_id;
 
-int socket;
+int sckt;
 
 void die(char *s){
   perror(s);
@@ -23,7 +23,7 @@ void create_router(int r_ID){
   for (int i = 0; fscanf(file, "%d %d %s", &router[i].id, &router[i].port, router[i].ip) != EOF; i++);
   fclose(file);
 
-  if((socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
+  if((sckt = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
     die("Erro ao criar Socket\n");
 
   memset((char *) &si_me, 0, sizeof(si_me));
