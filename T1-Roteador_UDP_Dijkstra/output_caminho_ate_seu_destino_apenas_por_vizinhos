@@ -41,4 +41,3 @@ r_table[start].path[ROT] | r_table[5].path[2] = 3
 r_table[start].path[ROT] | r_table[5].path[3] = 3
 r_table[start].path[ROT] | r_table[5].path[4] = 4
 r_table[start].path[ROT] | r_table[5].path[5] = 5
-
