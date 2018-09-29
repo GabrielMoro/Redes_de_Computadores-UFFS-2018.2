@@ -11,7 +11,7 @@ int sckt;
 
 void die(char *s){
   perror(s);
-  exit(1);
+  //exit(1);
 }
 
 void *receive(){
