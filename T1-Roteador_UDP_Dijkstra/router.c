@@ -174,5 +174,12 @@ int main(){
 
   pthread_create(&thread_id, NULL, receive, NULL);
 
+  sleep(3);
+
+  int x;
+  while(scanf("%d\n", &x) == 69){
+    printf("kkk eai men");
+  }
+
   return 0;
 }
