@@ -180,6 +180,7 @@ int main(){
   while(x == 69){
     scanf("%d\n", &x);
     printf("kkk eai men");
+    sleep(5);
   }
 
   return 0;
