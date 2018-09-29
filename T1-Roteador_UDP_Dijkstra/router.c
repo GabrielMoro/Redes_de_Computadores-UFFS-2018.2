@@ -14,6 +14,15 @@ void die(char *s){
   exit(1);
 }
 
+/*void *receive(){
+  int slen = sizeof(si_other);
+
+  while(scanf("%s\n", 'q')){
+    printf("Teste receive");
+  }
+}
+*/
+
 void create_router(int r_ID){
   FILE *file = fopen("roteador.config", "r");
 
@@ -141,7 +150,7 @@ int main(){
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
 
-  create_router(0);
+  //create_router(0);
   printf("\n");
   create_links(tab_rot);
 
@@ -162,6 +171,8 @@ int main(){
   memset((char *) &si_other, 0, sizeof(si_other));
   si_other.sin_family = AF_INET;
   si_other.sin_addr.s_addr =  htonl(INADDR_ANY);
+
+  create_router(0);
 
   return 0;
 }
