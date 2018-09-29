@@ -11,11 +11,6 @@ void create_router(int r_ID){
     for (int i = 0; fscanf(file, "%d %d %s", &router[i].id, &router[i].port, router[i].ip) != EOF; i++);
 
     fclose(file);
-
-    #ifdef DEBUG
-      for(int i = 0; i < N_ROT; i++)
-        printf("%d %d %s\n", router[i].id, router[i].port, router[i].ip);
-    #endif
   }
 }
 
@@ -30,14 +25,6 @@ void create_links(int tab[N_ROT][N_ROT]){
     }
 
     fclose(file);
-
-    #ifdef DEBUG
-      for(int i = 0; i < N_ROT; i++){
-        for (int j = 0; j < N_ROT; j++)
-          printf("%2d ", tab[i][j]);
-        printf("\n");
-      }
-    #endif
   }
 }
 
