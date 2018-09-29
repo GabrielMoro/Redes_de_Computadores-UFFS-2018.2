@@ -34,8 +34,6 @@ void create_router(int r_ID){
 
   if(bind(sckt, (struct sockaddr*)&si_me, sizeof(si_me)) == -1)
     die("Erro ao dar bind!");
-
-  printf("xD");
 }
 
 void create_links(int tab[N_ROT][N_ROT]){
