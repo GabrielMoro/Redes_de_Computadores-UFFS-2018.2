@@ -164,17 +164,19 @@ int main(){
 
   do{
     scanf("%d\n", &id);
+    if(id <= 0 || id > N_ROT)
+      printf("ID inválido!\nID válidos: [0, %d]\n", N_ROT - 1);
   }while(id <= 0 || id > N_ROT);
 
   memset((char *) &si_other, 0, sizeof(si_other));
   si_other.sin_family = AF_INET;
   si_other.sin_addr.s_addr =  htonl(INADDR_ANY);
 
-  create_router(0);
+  create_router(id);
 
   pthread_create(&thread_id, NULL, receive, NULL);
 
-  sleep(1);
+  // sleep(1);
 
   while(1){
     printf("=- ROTEADOR %d -=\n", id);
