@@ -15,11 +15,11 @@ void die(char *s){
 }
 
 void *receive(){
-  int slen = sizeof(si_other);
+  //int slen = sizeof(si_other);
   //char a;
 
   while(1){
-    printf("Teste receive");
+    //printf("Teste receive");
   }
 }
 
