@@ -19,7 +19,7 @@ void *receive(){
   //char a;
 
   while(1){
-    //printf("Teste receive");
+    printf("Teste receive");
   }
 }
 
@@ -219,7 +219,7 @@ int main(int argc, char *argv[]){
   }
 
 =======
-  
+
 >>>>>>> 97b715d0a627de0f7774b7a1451650cb4098ab73
   return 0;
 }
