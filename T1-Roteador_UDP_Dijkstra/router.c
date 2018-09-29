@@ -146,6 +146,7 @@ void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
 }
 
 int main(){
+  getchar();
   int tab_rot[N_ROT][N_ROT], id, opt;
 
   memset(tab_rot, -1, sizeof(int) * N_ROT * N_ROT);
