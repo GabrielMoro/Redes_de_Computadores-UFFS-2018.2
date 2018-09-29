@@ -7,7 +7,7 @@ struct sockaddr_in si_me, si_other;
 
 pthread_t thread_id;
 
-int sckt, message_control_in = 0, messsage_control;
+int sckt, message_control_in = 0, message_control;
 
 void die(char *s){
   perror(s);
@@ -25,14 +25,14 @@ void *receive(int id){
     }
 
     if(router[id].message_in[message_control_in].destination == id){
-      printf("Mensagem recebida do roteador %d\n". router[id].message_in[message_control_in].source);
+      printf("Mensagem recebida do roteador %d\n", router[id].message_in[message_control_in].source);
       message_control_in++;
     }else{
-      router[id].message_out[messsage_control] = router[id].message_in[message_control_in];
-      next = r_table[id].path[router[id].message_out[messsage_control].destination];
+      router[id].message_out[message_control] = router[id].message_in[message_control_in];
+      next = r_table[id].path[router[id].message_out[message_control].destination];
       printf("Retransmitindo de %d para %d\n", router[id].message_in[message_control_in].source, next);
 
-      send(id, next);
+      send_message(id, next);
     }
   }
 }
@@ -48,18 +48,18 @@ void create_message(int id){
 
   printf("Escreva a mensagem a ser enviada para %d:\n", destination);
   getchar();
-  fgets(router[id].message_out[messsage_control].content, MESSAGE_SIZE, stdin);
+  fgets(router[id].message_out[message_control].content, MESSAGE_SIZE, stdin);
 
-  router[id].message_out[messsage_control].id = messsage_control;
-  router[id].message_out[messsage_control].source = id;
-  router[id].message_out[messsage_control].destination = destination;
+  router[id].message_out[message_control].id = message_control;
+  router[id].message_out[message_control].source = id;
+  router[id].message_out[message_control].destination = destination;
 
   next = r_table[id].path[destination];
 
-  send(id, next);
+  send_message(id, next);
 }
 
-void send(int this_id, int next_id){
+void send_message(int this_id, int next_id){
   printf("Enviando mensagem para roteador com ID %d\n", next_id);
   sleep(1);
 
@@ -71,7 +71,7 @@ void send(int this_id, int next_id){
     if(sendto(sckt, &router[this_id].message_out[message_control], sizeof(router[this_id].message_out[message_control]), 0, (struct sockaddr*) &si_other, sizeof(si_other)) == -1)
       die("Erro ao enviar mensagem\n");
     else
-      printf("Roteador %d, enviando mensagem #%d para o roteador com ID %d\n", id, router[this_id].message_out[message_control].id, next_id);
+      printf("Roteador %d, enviando mensagem #%d para o roteador com ID %d\n", this_id, router[this_id].message_out[message_control].id, next_id);
 }
 
 void create_router(int r_ID){
@@ -258,7 +258,7 @@ int main(int argc, char *argv[]){
           if(i < message_control_in){
             printf("Mensagem #%d recebida de %d\n", router[id].message_in[i].id, router[id].message_in[i].source);
           }
-          printf("- '%s'\n", mrouter[id].message_in[i].content);
+          printf("- '%s'\n", router[id].message_in[i].content);
         }
         sleep(10);
         break;
