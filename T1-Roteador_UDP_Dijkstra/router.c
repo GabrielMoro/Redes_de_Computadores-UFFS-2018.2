@@ -1,3 +1,9 @@
+//Trabalho 1 - Roteador UDP, Dijkstra
+//Eduardo Tonatto e Gabriel Henrique Moro
+//Arquivo principal
+
+//Para compilar: gcc router.c -o router -pthread
+//Para executar: ./router [id_do_roteador_desejado]
 #include "router.h"
 
 Router router[N_ROT];
