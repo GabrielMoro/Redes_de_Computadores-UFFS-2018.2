@@ -26,11 +26,11 @@ void *receive(void * n){
       message_control_in--;
     }else{}
 
+    printf("THIS_ID = %d\nrouter[id].message_in[message_control_in].destination = %d", id, router[id].message_in[message_control_in].destination);
     if(router[id].message_in[message_control_in].destination == id){
       printf("Mensagem recebida do roteador %d\n", router[id].message_in[message_control_in].source);
       message_control_in++;
     }else{
-      printf("%d\n", id);
       router[id].message_out[message_control] = router[id].message_in[message_control_in];
       next = r_table[id].path[router[id].message_out[message_control].destination];
       printf("Retransmitindo de %d para %d\n", router[id].message_in[message_control_in].source, next);
