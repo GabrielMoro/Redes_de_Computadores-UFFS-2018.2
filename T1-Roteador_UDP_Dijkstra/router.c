@@ -22,20 +22,23 @@ void *receive(void * n){
   while(1){
     Package message_in = router[id].message_in[message_control_in];
     Package message_out = router[id].message_out[message_control];
-    printf("1.  message_out.content: %s\n", message_in.content);
+    printf("1.  message_in.content: %s\n", message_in.content);
     if((recvfrom(sckt, &message_in, sizeof(message_in), 0, (struct sockaddr*) &si_me, &slen)) == -1){
         printf("Erro ao receber mensagem!\n");
       message_control_in--;
     }else{}
 
-    printf("2.  message_out.content: %s\n", message_in.content);
+    printf("2.  message_in.content: %s\n", message_in.content);
     if(message_in.destination == id){
       printf("Mensagem recebida do roteador %d\n", message_in.source);
+      router[id].message_in[message_control_in].content = message_in.content;
+      router[id].message_in[message_control_in].id = message_in.id;
+      router[id].message_in[message_control_in].source = message_in.source;
       message_control_in++;
     }else{
       message_out = message_in;
       next = r_table[id].path[message_out.destination];
-      printf("Retransmitindo de %d para %d\n", router[id].message_in[message_control_in].source, next);
+      printf("Retransmitindo de %d para %d\n", id, next);
 
       send_message(next, message_out);
     }
