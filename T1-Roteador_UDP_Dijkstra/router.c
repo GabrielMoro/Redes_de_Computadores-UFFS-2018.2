@@ -55,7 +55,7 @@ void create_message(){
   }while(destination < 0 || destination >= N_ROT);
 
   printf("Escreva a mensagem a ser enviada para %d:\n", destination);
-  // getchar();
+  getchar();
   fgets(router[id].message_out[message_control].content, MESSAGE_SIZE, stdin);
 
   printf("Conteúdo da mensagem: %s\n", router[id].message_out[message_control].content);
