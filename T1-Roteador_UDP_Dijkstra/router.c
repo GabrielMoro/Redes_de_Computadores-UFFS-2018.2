@@ -31,7 +31,8 @@ void *receive(void * n){
     printf("2.  message_in.content: %s\n", message_in.content);
     if(message_in.destination == id){
       printf("Mensagem recebida do roteador %d\n", message_in.source);
-      router[id].message_in[message_control_in].content = message_in.content;
+      for(int i = 0; i < MESSAGE_SIZE; i++)
+        router[id].message_in[message_control_in].content[i] = message_in.content[i];
       router[id].message_in[message_control_in].id = message_in.id;
       router[id].message_in[message_control_in].source = message_in.source;
       message_control_in++;
