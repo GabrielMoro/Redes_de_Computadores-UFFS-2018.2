@@ -35,6 +35,7 @@ void *receive(void * n){
     }else{
       message_out = message_in;
       next = r_table[id].path[message_out.destination];
+      printf("3. next = %d\n", next);
       printf("Retransmitindo de %d para %d\n", router[id].message_in[message_control_in].source, next);
 
       send_message(next);
