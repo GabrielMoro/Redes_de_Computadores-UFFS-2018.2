@@ -1,3 +1,7 @@
+//Trabalho 1 - Roteador UDP, Dijkstra
+//Eduardo Tonatto e Gabriel Henrique Moro
+//Header: estruturas e funções utilizadas
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -5,13 +9,13 @@
 #include <sys/socket.h>
 #include <pthread.h>
 
-#define QUEUE_SIZE 100     // Tamanho das filas dos roteadores
-#define MESSAGE_SIZE 100  // Mensagens são limitadas a 100 caracteres
-#define N_ROT 6           // Número de roteadores
+#define QUEUE_SIZE 100                                      // Tamanho das filas dos roteadores
+#define MESSAGE_SIZE 100                                    // Mensagens são limitadas a 100 caracteres
+#define N_ROT 6                                             // Número de roteadores
 
-typedef struct{                     // Estrutura dos pacotes
-  int source, destination, id;    // Header
-  char content[MESSAGE_SIZE];       // Mensagem
+typedef struct{                                             // Estrutura dos pacotes
+  int source, destination, id;                              // Header
+  char content[MESSAGE_SIZE];                               // Mensagem
 }Package;
 
 typedef struct{                                             // Estrutura dos roteadores
@@ -20,7 +24,7 @@ typedef struct{                                             // Estrutura dos rot
   char ip[30];
 }Router;
 
-typedef struct{                     // Estrutura das tabelas de roteamentos
+typedef struct{                                             // Estrutura das tabelas de roteamentos
   int cost[N_ROT];
   int path[N_ROT];
 }Table;
