@@ -66,6 +66,7 @@ void create_message(){
   next = r_table[id].path[destination];
 
   message_out = router[id].message_out[message_control];
+  message_control++;
   send_message(next, message_out);
 }
 
