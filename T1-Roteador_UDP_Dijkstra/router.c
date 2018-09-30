@@ -276,6 +276,7 @@ int main(int argc, char *argv[]){
         //sleep(10);
         printf("Pressione ENTER para prosseguir!\n");
         getchar();
+        getchar();
         break;
       case 1:
         create_message();
