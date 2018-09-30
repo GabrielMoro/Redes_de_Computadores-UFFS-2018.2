@@ -256,7 +256,6 @@ int main(int argc, char *argv[]){
     printf("2 - Sair\n");
     printf("----------------------------------------\n");
     scanf("%d\n", &opt);
-    /*
     switch (opt){
       case 0:
         for(int i = 0; i <= message_control_in; i++){
@@ -277,7 +276,6 @@ int main(int argc, char *argv[]){
         printf("Opção inválida!\n");
         break;
     }
-    */
   }
 
   return 0;
