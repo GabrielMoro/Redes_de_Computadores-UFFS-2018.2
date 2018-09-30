@@ -255,7 +255,7 @@ int main(int argc, char *argv[]){
     printf("1 - Enviar mensagem\n");
     printf("2 - Sair\n");
     printf("----------------------------------------\n");
-    scanf("%d\n", &opt);
+    scanf("%d", &opt);
     switch (opt){
       case 0:
         for(int i = 0; i <= message_control_in; i++){
