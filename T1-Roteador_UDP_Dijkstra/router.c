@@ -7,7 +7,7 @@ struct sockaddr_in si_me, si_other;
 
 pthread_t thread_id;
 
-int sckt, message_control_in = 0, message_control, id;
+int sckt, message_control_in = 0, message_control = 0, id;
 
 void die(char *s){
   perror(s);
