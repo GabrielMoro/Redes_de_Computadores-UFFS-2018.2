@@ -47,15 +47,18 @@ void create_message(){
   int destination, next;
   Package message_out;
 
-  printf("Digite o roteador de destino: ");
-  scanf("%d", &destination);
-
-  if(destination < 0 || destination > N_ROT)
-    printf("Roteador informado não existe!\n");
+  do{
+    printf("Digite o roteador de destino: ");
+    scanf("%d", &destination);
+    if(destination < 0 || destination >= N_ROT)
+      printf("Roteador informado não existe!\n\n");
+  }while(destination < 0 || destination >= N_ROT);
 
   printf("Escreva a mensagem a ser enviada para %d:\n", destination);
-  getchar();
+  // getchar();
   fgets(router[id].message_out[message_control].content, MESSAGE_SIZE, stdin);
+
+  printf("Conteúdo da mensagem: %s\n", router[id].message_out[message_control].content);
 
   router[id].message_out[message_control].id = message_control;
   router[id].message_out[message_control].source = id;
@@ -267,9 +270,8 @@ int main(int argc, char *argv[]){
     switch (opt){
       case 0:
         for(int i = 0; i <= message_control_in; i++){
-          if(i < message_control_in){
+          if(i < message_control_in)
             printf("Mensagem #%d recebida de %d\n", router[id].message_in[i].id, router[id].message_in[i].source);
-          }
           printf("- %s\n", router[id].message_in[i].content);
         }
         sleep(10);
