@@ -210,9 +210,9 @@ void pathcost(int start, int tab_rot[N_ROT][N_ROT]){
 }
 
 int toint(char *str){//converte pra int//função da internet
-  int i, pot, ans;
+  int ans;
   ans = 0;
-  for(i = strlen(str) - 1, pot = 1; i >= 0; i--, pot *= 10)
+  for(int i = strlen(str) - 1, pot = 1; i >= 0; i--, pot *= 10)
     ans += pot * (str[i] - '0');
   return ans;
 }
