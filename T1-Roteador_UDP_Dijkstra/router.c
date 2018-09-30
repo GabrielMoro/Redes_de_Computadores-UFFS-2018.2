@@ -58,10 +58,10 @@ void create_message(){
 
   next = r_table[id].path[destination];
 
-  send_message(id, next);
+  send_message(next);
 }
 
-void send_message(int this_id, int next_id){
+void send_message(int next_id){
   printf("Enviando mensagem para roteador com ID %d\n", next_id);
   sleep(1);
 
@@ -70,10 +70,10 @@ void send_message(int this_id, int next_id){
   if(inet_aton(router[next_id].ip, &si_other.sin_addr) == 0)
     die("Erro na obtenção do IP do destino\n");
   else
-    if(sendto(sckt, &router[this_id].message_out[message_control], sizeof(router[this_id].message_out[message_control]), 0, (struct sockaddr*) &si_other, sizeof(si_other)) == -1)
+    if(sendto(sckt, &router[id].message_out[message_control], sizeof(router[id].message_out[message_control]), 0, (struct sockaddr*) &si_other, sizeof(si_other)) == -1)
       die("Erro ao enviar mensagem\n");
     else
-      printf("Roteador %d, enviando mensagem #%d para o roteador com ID %d\n", this_id, router[this_id].message_out[message_control].id, next_id);
+      printf("Roteador %d, enviando mensagem #%d para o roteador com ID %d\n", id, router[id].message_out[message_control].id, next_id);
 }
 
 void create_router(int r_ID){
@@ -268,7 +268,7 @@ int main(int argc, char *argv[]){
         sleep(10);
         break;
       case 1:
-        create_message(id);
+        create_message();
         break;
       case 2:
         exit(1);
