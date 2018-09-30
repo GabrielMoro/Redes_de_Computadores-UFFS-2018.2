@@ -7,14 +7,14 @@ struct sockaddr_in si_me, si_other;
 
 pthread_t thread_id;
 
-int sckt, message_control_in = 0, message_control;
+int sckt, message_control_in = 0, message_control, id;
 
 void die(char *s){
   perror(s);
   exit(1);
 }
 
-void *receive(int id){
+void *receive(void * n){
   int slen = sizeof(si_other);
   int next;
 
@@ -209,7 +209,7 @@ int toint(char *str){//converte pra int//função da internet
 }
 
 int main(int argc, char *argv[]){
-  int tab_rot[N_ROT][N_ROT], opt, id, aux;
+  int tab_rot[N_ROT][N_ROT], opt, aux;
 
   if(argc < 2)
     die("Insira o ID do roteador!\n");
@@ -242,7 +242,7 @@ int main(int argc, char *argv[]){
 
   create_router(id);
 
-  pthread_create(&thread_id, NULL, receive(id), NULL);
+  pthread_create(&thread_id, NULL, receive, NULL);
 
   sleep(1);
 
