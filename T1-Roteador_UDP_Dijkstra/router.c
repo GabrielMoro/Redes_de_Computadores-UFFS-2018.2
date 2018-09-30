@@ -274,7 +274,7 @@ int main(int argc, char *argv[]){
           }
         }
         //sleep(10);
-        printf("Pressione ENTER para prosseguir!\n");
+        printf("Pressione ENTER para prosseguir!");
         getchar();
         getchar();
         break;
