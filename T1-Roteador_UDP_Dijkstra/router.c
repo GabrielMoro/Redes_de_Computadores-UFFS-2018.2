@@ -38,13 +38,14 @@ void *receive(void * n){
       printf("3. next = %d\n", next);
       printf("Retransmitindo de %d para %d\n", router[id].message_in[message_control_in].source, next);
 
-      send_message(next);
+      send_message(next, message_out);
     }
   }
 }
 
 void create_message(){
   int destination, next;
+  Package message_out;
 
   printf("Digite o roteador de destino: ");
   scanf("%d", &destination);
@@ -64,11 +65,11 @@ void create_message(){
   next = r_table[id].path[destination];
   printf("2. next = %d\n", next);
 
-  send_message(next);
+  message_out = router[id].message_out[message_control];
+  send_message(next, message_out);
 }
 
-void send_message(int next_id){
-  Package message_out = router[id].message_out[message_control];
+void send_message(int next_id, Package message_out){
   printf("Enviando mensagem para roteador com ID %d\n", next_id);
   sleep(1);
 
