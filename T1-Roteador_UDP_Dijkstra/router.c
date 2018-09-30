@@ -22,13 +22,11 @@ void *receive(void * n){
   while(1){
     Package message_in = router[id].message_in[message_control_in];
     Package message_out = router[id].message_out[message_control];
-    printf("1.  message_in.content: %s\n", message_in.content);
     if((recvfrom(sckt, &message_in, sizeof(message_in), 0, (struct sockaddr*) &si_me, &slen)) == -1){
         printf("Erro ao receber mensagem!\n");
       message_control_in--;
     }else{}
 
-    printf("2.  message_in.content: %s\n", message_in.content);
     if(message_in.destination == id){
       printf("Mensagem recebida do roteador %d\n", message_in.source);
       for(int i = 0; i < MESSAGE_SIZE; i++)
@@ -61,8 +59,6 @@ void create_message(){
   getchar();
   fgets(router[id].message_out[message_control].content, MESSAGE_SIZE, stdin);
 
-  printf("1.  router[id].message_out[message_control].content: %s\n", router[id].message_out[message_control].content);
-
   router[id].message_out[message_control].id = message_control;
   router[id].message_out[message_control].source = id;
   router[id].message_out[message_control].destination = destination;
@@ -70,7 +66,6 @@ void create_message(){
   next = r_table[id].path[destination];
 
   message_out = router[id].message_out[message_control];
-  printf("2.  message_out.content: %s\n", message_out.content);
   send_message(next, message_out);
 }
 
@@ -272,9 +267,10 @@ int main(int argc, char *argv[]){
     switch (opt){
       case 0:
         for(int i = 0; i <= message_control_in; i++){
-          if(i < message_control_in)
+          if(i < message_control_in){
             printf("Mensagem #%d recebida de %d\n", router[id].message_in[i].id, router[id].message_in[i].source);
-          printf("- %s\n", router[id].message_in[i].content);
+            printf("- %s\n", router[id].message_in[i].content);
+          }
         }
         sleep(10);
         break;
