@@ -20,11 +20,11 @@ void *receive(void * n){
 
 
   while(1){
-    //Package message_in = router[id].message_in[message_control_in];
-    //if((recvfrom(sckt, &message_in, sizeof(message_in), 0, (struct sockaddr*) &si_me, &slen)) == -1){
-    //    printf("Erro ao receber mensagem!\n");
-    //  message_control_in--;
-    //}else{}
+    Package message_in = router[id].message_in[message_control_in];
+    if((recvfrom(sckt, &message_in, sizeof(message_in), 0, (struct sockaddr*) &si_me, &slen)) == -1){
+        printf("Erro ao receber mensagem!\n");
+      message_control_in--;
+    }else{}
 
     if(router[id].message_in[message_control_in].destination == id){
       printf("Mensagem recebida do roteador %d\n", router[id].message_in[message_control_in].source);
