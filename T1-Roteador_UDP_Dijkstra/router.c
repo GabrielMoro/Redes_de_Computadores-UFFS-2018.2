@@ -268,7 +268,7 @@ int main(int argc, char *argv[]){
           if(i < message_control_in){
             printf("Mensagem #%d recebida de %d\n", router[id].message_in[i].id, router[id].message_in[i].source);
           }
-          printf("- '%s'\n", router[id].message_in[i].content);
+          printf("- %s\n", router[id].message_in[i].content);
         }
         sleep(10);
         break;
