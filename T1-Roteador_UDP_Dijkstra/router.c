@@ -39,7 +39,7 @@ void *receive(void * n){
   }
 }
 
-void create_message(int id){
+void create_message(){
   int destination, next;
 
   printf("Digite o roteador de destino: ");
