@@ -12,7 +12,7 @@ void die(char *s){
   exit(1);
 }
 
-void router_config(int r_id){
+void router_config(int r_id){// Configura o roteador com base no arquivo router.config
   FILE *config = fopen("roteador.config", "r");
 
   if(config){
@@ -45,6 +45,14 @@ void router_config(int r_id){
     die("Erro ao dar bind!");
 }
 
+int toint(char *str){// Converte de string/char para int // Função da internet
+  int ans;
+  ans = 0;
+  for(int i = strlen(str) - 1, pot = 1; i >= 0; i--, pot *= 10)
+    ans += pot * (str[i] - '0');
+  return ans;
+}
+
 int main(int argc, char *argv[]){
   int tab_rot[MAX_ROT];
   int opt, aux;
@@ -72,6 +80,23 @@ int main(int argc, char *argv[]){
     printf("0 - Sair\n");
     printf("----------------------------------------\n");
     scanf("Opção: %d", &opt);
+  }
+  switch(opt){
+    case 1:
+      break;
+    case 2:
+      create_message();
+      break;
+    case 3:
+      break;
+    case 4:
+      system("clear");
+      printf("Saindo...");
+      exit(0);
+      break;
+    default:
+      printf("Opção %d inválida!\n", opt);
+      break;
   }
 
   return 0;
