@@ -5,11 +5,48 @@ Table r_table[MAX_ROT];
 
 struct sockaddr_in si_me, si_other;
 
-pthread_t receive_thread;
+pthread_t receive_thread, send_thread, process_thread;
 
 void die(char *s){
   perror(s);
   exit(1);
+}
+
+// void *send(Package *msg){
+//
+// }
+
+// void *process(Package msg){
+//
+// }
+
+// void *receive(void *n){
+//   while(1){
+//
+//   }
+// }
+
+
+void create_message(){
+  int destination;
+  Package msg;
+
+  do{
+    printf("Digite o roteador de destino: ");
+    scanf("%d", &destination);
+    if(destination < 0 || destination >= MAX_ROT)
+      printf("Roteador informado não existe!\n\n");
+  }while(destination < 0 || destination >= MAX_ROT);
+  printf("Escreva a mensagem a ser enviada para %d:\n", destination);
+  getchar();
+
+  fgets(msg.content, MESSAGE_SIZE, stdin);
+
+  msg.source = id;
+  msg.destination = destination;
+  msg.type = 0;     // Tipo 0 = Mensagem
+
+
 }
 
 void router_config(int r_id){// Configura o roteador com base no arquivo router.config
@@ -79,7 +116,8 @@ int main(int argc, char *argv[]){
     printf("3 - Criar/Remover enlace\n");
     printf("0 - Sair\n");
     printf("----------------------------------------\n");
-    scanf("Opção: %d", &opt);
+    printf("Opção: ");
+    scanf("%d", &opt);
   }
   switch(opt){
     case 1:
