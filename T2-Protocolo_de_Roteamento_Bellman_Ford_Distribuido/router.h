@@ -9,6 +9,10 @@
 #define MESSAGE_SIZE 100  // Mensagens são limitadas a 100 caracteres
 #define MAX_ROT 100
 
+#define MESSAGE 0
+#define DIST_VECTOR 1
+#define ACK 2
+
 typedef struct{                                             // Estrutura dos roteadores
   int id, port;                                             // ID e porta do roteador
   Package message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];  // Filas do roteador
