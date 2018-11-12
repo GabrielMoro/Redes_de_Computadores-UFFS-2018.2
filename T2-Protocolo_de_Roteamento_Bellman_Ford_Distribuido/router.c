@@ -17,7 +17,9 @@ void die(char *s){
 // }
 
 // void *process(Package msg){
+//   if(msg.type == DIST_VECTOR){
 //
+//   }
 // }
 
 // void *receive(void *n){
