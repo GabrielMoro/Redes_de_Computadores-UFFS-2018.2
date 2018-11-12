@@ -21,6 +21,8 @@ void die(char *s){
 // }
 
 // void *receive(void *n){
+//   int slen = sizeof(si_other);
+//
 //   while(1){
 //
 //   }
@@ -32,7 +34,7 @@ void create_message(){
   Package msg;
 
   do{
-    printf("Digite o roteador de destino: ");
+    printf("\nDigite o roteador de destino: ");
     scanf("%d", &destination);
     if(destination < 0 || destination >= MAX_ROT)
       printf("Roteador informado não existe!\n\n");
@@ -44,7 +46,7 @@ void create_message(){
 
   msg.source = id;
   msg.destination = destination;
-  msg.type = 0;     // Tipo 0 = Mensagem
+  msg.type = MESSAGE;
 
 
 }
@@ -113,8 +115,9 @@ int main(int argc, char *argv[]){
     printf("----------------------------------------\n");
     printf("1 - Ver histórico de mensagens\n");
     printf("2 - Enviar mensagem\n");
-    printf("3 - Criar/Remover enlace\n");
-    printf("0 - Sair\n");
+    printf("3 - Criar enlace\n");
+    printf("4 - Remover enlace\n");
+    printf("5 - Sair\n");
     printf("----------------------------------------\n");
     printf("Opção: ");
     scanf("%d", &opt);
@@ -128,7 +131,8 @@ int main(int argc, char *argv[]){
     case 3:
       break;
     case 4:
-      system("clear");
+      break;
+    case 5:
       printf("Saindo...");
       exit(0);
       break;
