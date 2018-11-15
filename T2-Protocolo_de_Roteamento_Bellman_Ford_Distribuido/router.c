@@ -1,35 +1,39 @@
 #include "router.h"
 
 Router router;
-Table r_table[MAX_ROT];
+Table r_table[MAX_ROT];                                   // Tabela de roteamento
+// Package message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];  // Filas do roteador
 
 struct sockaddr_in si_me, si_other;
 
-pthread_t receive_thread, send_thread, process_thread;
+pthread_t receive_message, send_message, process_vector;
 
 void die(char *s){
   perror(s);
   exit(1);
 }
 
-// void *send(Package *msg){
+// void *send_message(Package msg){
+//   int slen = sizeof(si_other);
 //
-// }
-
-// void *process(Package msg){
-//   if(msg.type == DIST_VECTOR){
+//   while(1){
+//     if(msg.type == DIST_VECTOR){
 //
+//     }
 //   }
 // }
 
-// void *receive(void *n){
+// void *process_vector(Package msg){
+//
+// }
+
+// void *receive_message(void *n){
 //   int slen = sizeof(si_other);
 //
 //   while(1){
 //
 //   }
 // }
-
 
 void create_message(){
   int destination;
