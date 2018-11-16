@@ -1,3 +1,4 @@
+#include <time.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -33,5 +34,10 @@ typedef struct{
 
 typedef struct{                     // Estrutura das tabelas de roteamentos
   int cost;
-  int next_id, next_ip, next_port;
+  int next;
 }Table;
+
+typedef struct{
+  int port;
+  char ip[30];
+}Neighbors;
