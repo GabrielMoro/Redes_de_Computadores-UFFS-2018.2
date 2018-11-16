@@ -1,7 +1,8 @@
 #include "router.h"
 
 Router router;
-Table r_table[MAX_ROT];                                   // Tabela de roteamento
+Table r_table[MAX_ROT];                                      // Tabela de roteamento
+Neighbors n_table[MAX_ROT];
 // Package message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];  // Filas do roteador
 
 struct sockaddr_in si_me, si_other;
@@ -55,6 +56,39 @@ void create_message(){
   msg.type = MESSAGE;
 
 
+}
+
+void init_topology(int r_id){
+  FILE *links = fopen("enlaces.config", "r");
+  FILE *config = fopen("roteador.config", "r");
+  int x, y, w;
+  int id, port;
+  char ip[30];
+
+  if(links && config){
+    for (int i = 0; fscanf(links, "%d %d %d", &x, &y, &w) != EOF; i++){
+      for(int i = 0; fscanf(config, "%d %d %s", &id, &port, ip) != EOF; i++){
+        if(r_id == x){
+          if(id == y){
+            n_table[y].port = port;
+            n_table[y].ip = ip;
+            r_table[y].next = y;
+            r_table[y].cost = w;
+            break;
+          }
+        }
+        if(r_id == y){
+          if(id == x){
+            n_table[x].port = port;
+            n_table[x].ip = ip;
+            r_table[x].next = x;
+            r_table[x].cost = w;
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 void router_config(int r_id){// Configura o roteador com base no arquivo router.config
