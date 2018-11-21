@@ -3,6 +3,7 @@
 Router router;
 Table r_table[MAX_ROT];                                      // Tabela de roteamento
 Neighbors n_table[MAX_ROT];
+Dist_Vector dv_table[MAX_ROT];
 // Package message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];  // Filas do roteador
 
 struct sockaddr_in si_me, si_other;
@@ -74,6 +75,7 @@ void init_topology(int r_id){
             n_table[y].ip = ip;
             r_table[y].next = y;
             r_table[y].cost = w;
+            dv_table[r_id].cost[y] = w;
             break;
           }
         }
@@ -83,6 +85,7 @@ void init_topology(int r_id){
             n_table[x].ip = ip;
             r_table[x].next = x;
             r_table[x].cost = w;
+            dv_table[r_id].cost[x] = w;
             break;
           }
         }
@@ -147,6 +150,12 @@ int main(int argc, char *argv[]){
     printf("Intervalo de roteadores: [0, %d].\n", N_ROT - 1);
     die("ID de roteador inválido!\n");
   }
+
+  for(int i = 0; i < MAX_ROT; i++)
+    for(int j = 0; j < MAX_ROT; j++)
+      dv_table[i].cost[j] = INF;
+
+  dv_table[id].cost[id] = 0;
 
   while(1){
     system("clear");
