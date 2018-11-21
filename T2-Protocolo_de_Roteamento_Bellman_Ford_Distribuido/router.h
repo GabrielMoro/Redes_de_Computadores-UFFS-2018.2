@@ -8,7 +8,7 @@
 
 #define QUEUE_SIZE 93              // Tamanho das filas dos roteadores
 #define MESSAGE_SIZE 100           // Mensagens são limitadas a 100 caracteres
-#define MAX_ROT 50
+#define MAX_ROT 30
 #define INF 500
 
 #define MESSAGE 0
@@ -28,7 +28,6 @@ typedef struct{                     // Estrutura dos pacotes
 }Package;
 
 typedef struct{
-  int source[MAX_ROT];
   int cost[MAX_ROT];
 }Dist_Vector;
 
