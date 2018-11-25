@@ -6,11 +6,12 @@ Neighbors n_table[MAX_ROT];
 Dist_Vector dv_table[MAX_ROT];
 // Package message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];  // Filas do roteador
 
-int sckt, id;
+int sckt, id, dv_changed = 1;
 
 struct sockaddr_in si_me, si_other;
 
-pthread_t receive_message, send_message, process_vector;
+pthread_t receive_message, send_message, receive_vector, send_vector;
+pthread_mutex_t send_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void die(char *s){
   perror(s);
@@ -39,23 +40,7 @@ void die(char *s){
 //   }
 // }
 
-void send_dist_vector(Package msg, int n_id){
-  printf("n_id = %d, port = %d, ip = %s\n", n_id, n_table[n_id].port, n_table[n_id].ip);
-
-  sleep(1);
-  si_other.sin_port = htons(n_table[n_id].port);
-  printf("sin_port = %d\n", si_other.sin_port);
-
-  if(inet_aton(n_table[n_id].ip, &si_other.sin_addr) == 0)
-    die("Erro na obtenção do IP do destino (Vetores Distância)\n");
-  else
-    if(sendto(sckt, &msg, sizeof(msg), 0, (struct sockaddr*) &si_other, sizeof(si_other)) == -1)
-      die("Erro ao enviar vetores distância\n");
-    else
-      printf("Roteador %d enviando vetores distância para roteador %d\n", id, n_id);
-}
-
-void create_message(int type, int destination){
+Package create_message(int type, int destination){
   Package msg;
 
   msg.source = id;
@@ -67,10 +52,86 @@ void create_message(int type, int destination){
     getchar();
 
     fgets(msg.content, MESSAGE_SIZE, stdin);
+    return msg;
   }else if(type == DIST_VECTOR){
     for(int i = 0; i < MAX_ROT; i++)
       msg.dv[i] = dv_table[i];
-    send_dist_vector(msg, destination);
+    return msg;
+  }
+  return msg;
+}
+
+void *receive_dv(void *n){
+  int slen = sizeof(si_other);
+
+  while(1){
+    Package dv_in;
+    if((recvfrom(sckt, &dv_in, sizeof(dv_in), 0, (struct sockaddr*) &si_me, &slen)) == -1){
+        printf("Erro ao receber mensagem!\n");
+    }
+
+    if(dv_in.type == DIST_VECTOR){
+      for(int i = 0; i < MAX_ROT; i++){
+        for(int j = 0; j < MAX_ROT; j++)
+          if(dv_table[j].cost[i] > dv_in.dv[j].cost[i] && j != id){
+            dv_table[j].cost[i] = dv_in.dv[j].cost[i];
+            dv_changed = TRUE;
+        }
+        if(dv_table[id].cost[i] > dv_in.dv[dv_in.source].cost[i] + dv_table[id].cost[dv_in.source]){
+          dv_table[id].cost[i] = dv_in.dv[dv_in.source].cost[i] + dv_table[id].cost[dv_in.source];
+          r_table[i].cost = dv_in.dv[dv_in.source].cost[i] + dv_table[id].cost[dv_in.source];
+          r_table[i].next = dv_in.source;
+          dv_changed = TRUE;
+        }
+      }
+    }
+  }
+}
+
+void transfer_dv(char why){
+  Package msg;
+
+  printf("\n");
+  for(int n_id = 0; n_id < MAX_ROT; n_id++){
+    if(n_table[n_id].port != -1){
+      msg = create_message(DIST_VECTOR, n_id);
+      si_other.sin_port = htons(n_table[n_id].port);
+
+      if(inet_aton(n_table[n_id].ip, &si_other.sin_addr) == 0)
+        die("Erro na obtenção do IP do destino (Vetores Distância)\n");
+      else
+      if(sendto(sckt, &msg, sizeof(msg), 0, (struct sockaddr*) &si_other, sizeof(si_other)) == -1)
+        die("Erro ao enviar vetores distância\n");
+      else
+      if(why == 'C')
+        printf("Roteador %d enviando vetores distância para roteador %d. Houve mudança na tabela de roteamento.\n", id, n_id);
+      else
+        printf("Roteador %d enviando vetores distância para roteador %d. Passaram %d segundos.\n", id, n_id, SEND_TIME);
+
+    }
+  }
+}
+
+void *send_dv(void *n){
+  time_t timer;
+
+  timer = time(0);
+
+  sleep(1);
+  while(1){
+    pthread_mutex_lock(&send_mutex);
+
+    double dv_exec_time = difftime(time(0), timer);
+
+    if(dv_changed == TRUE){
+      transfer_dv('C');
+      dv_changed = FALSE;
+      timer = time(0);
+    }else if(dv_exec_time >= SEND_TIME){
+      transfer_dv('T');
+      timer = time(0);
+    }
+    pthread_mutex_unlock(&send_mutex);
   }
 }
 
@@ -151,7 +212,6 @@ int toint(char *str){// Converte de string/char para int // Função da internet
 }
 
 int main(int argc, char *argv[]){
-  int tab_rot[MAX_ROT];
   int opt, destination = -1;
 
   if(argc < 2)
@@ -173,14 +233,20 @@ int main(int argc, char *argv[]){
 
   for(int i = 0; i < MAX_ROT; i++){
     n_table[i].port = -1;
+    r_table[i].cost = INF;
+    r_table[i].next = -1;
     for(int j = 0; j < MAX_ROT; j++)
       dv_table[i].cost[j] = INF;
   }
 
   dv_table[id].cost[id] = 0;
+  r_table[id].cost = 0;
+  r_table[id].next = id;
+
   start_topology(id);
 
-  // pthread_create(&thread_id, NULL, receive, NULL);
+  pthread_create(&receive_vector, NULL, receive_dv, NULL);
+  pthread_create(&send_vector, NULL, send_dv, NULL);
 
   while(1){
     system("clear");
@@ -223,9 +289,13 @@ int main(int argc, char *argv[]){
         getchar();
         break;
       case 6:
+        printf("\nTabela de roteamento do roteador %d\n\n", id);
         for(int i = 0; i < MAX_ROT; i++)
-          if(n_table[i].port != -1)
-            create_message(DIST_VECTOR, i);
+          printf("Para %d - Próximo: %d, com custo: %d\n", i, r_table[i].next, r_table[i].cost);
+
+          printf("\nPressione ENTER para prosseguir!");
+          getchar();
+          getchar();
         break;
       case 0:
         printf("\nSaindo...\n\n");
