@@ -9,7 +9,7 @@
 #define QUEUE_SIZE 93              // Tamanho das filas dos roteadores
 #define MESSAGE_SIZE 100           // Mensagens são limitadas a 100 caracteres
 #define MAX_ROT 4
-#define INF 500
+#define INF 20
 #define SEND_TIME 5
 
 #define MESSAGE 0

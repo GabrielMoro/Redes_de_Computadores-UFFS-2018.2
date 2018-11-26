@@ -4,41 +4,20 @@ Router router;
 Table r_table[MAX_ROT];                                      // Tabela de roteamento
 Neighbors n_table[MAX_ROT];
 Dist_Vector dv_table[MAX_ROT];
-// Package message_in[QUEUE_SIZE], message_out[QUEUE_SIZE];  // Filas do roteador
+Package message_in[QUEUE_SIZE], message_out;  // Filas do roteador
 
-int sckt, id, dv_changed = 1;
+int sckt, id, dv_changed = 1, msg_flag = 0, message_control_in = 0, msg_id_control = 0;
+int alive_flag[MAX_ROT];
 
 struct sockaddr_in si_me, si_other;
 
-pthread_t receive_message, send_message, receive_vector, send_vector;
+pthread_t receive, send_message, send_vector, still_alive;
 pthread_mutex_t send_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void die(char *s){
   perror(s);
   exit(1);
 }
-
-// void *send_message(Package msg){
-//   int slen = sizeof(si_other);
-//
-//   while(1){
-//     if(msg.type == DIST_VECTOR){
-//
-//     }
-//   }
-// }
-
-// void *process_vector(Package msg){
-//
-// }
-
-// void *receive_message(void *n){
-//   int slen = sizeof(si_other);
-//
-//   while(1){
-//
-//   }
-// }
 
 Package create_message(int type, int destination){
   Package msg;
@@ -48,39 +27,47 @@ Package create_message(int type, int destination){
   msg.type = type;
 
   if(type == MESSAGE){
+    msg.msg_id = msg_id_control++;
     printf("Escreva a mensagem a ser enviada para %d:\n", destination);
     getchar();
 
     fgets(msg.content, MESSAGE_SIZE, stdin);
     return msg;
   }else if(type == DIST_VECTOR){
-    for(int i = 0; i < MAX_ROT; i++)
-      msg.dv[i] = dv_table[i];
+    msg.dv[id] = dv_table[id];
     return msg;
   }
   return msg;
 }
 
-void *receive_dv(void *n){
+void *receive_pkg(void *n){
   int slen = sizeof(si_other);
 
   while(1){
-    Package dv_in;
-    if((recvfrom(sckt, &dv_in, sizeof(dv_in), 0, (struct sockaddr*) &si_me, &slen)) == -1){
+    Package pkg_in;
+    if((recvfrom(sckt, &pkg_in, sizeof(pkg_in), 0, (struct sockaddr*) &si_me, &slen)) == -1){
         printf("Erro ao receber mensagem!\n");
     }
-
-    if(dv_in.type == DIST_VECTOR){
+    if(pkg_in.type == MESSAGE){
+      if(pkg_in.destination == id){
+        printf("\nMensagem recebida do roteador %d\n", pkg_in.source);
+        message_in[message_control_in] = pkg_in;
+        message_control_in++;
+      }else{
+        message_out = pkg_in;
+        printf("\nRetransmitindo de %d para %d\n", id, r_table[message_out.destination].next);
+        msg_flag = 1;
+      }
+    }else if(pkg_in.type == DIST_VECTOR){
+      alive_flag[pkg_in.source] = 1;
       for(int i = 0; i < MAX_ROT; i++){
-        for(int j = 0; j < MAX_ROT; j++)
-          if(dv_table[j].cost[i] > dv_in.dv[j].cost[i] && j != id){
-            dv_table[j].cost[i] = dv_in.dv[j].cost[i];
-            dv_changed = TRUE;
-        }
-        if(dv_table[id].cost[i] > dv_in.dv[dv_in.source].cost[i] + dv_table[id].cost[dv_in.source]){
-          dv_table[id].cost[i] = dv_in.dv[dv_in.source].cost[i] + dv_table[id].cost[dv_in.source];
-          r_table[i].cost = dv_in.dv[dv_in.source].cost[i] + dv_table[id].cost[dv_in.source];
-          r_table[i].next = dv_in.source;
+        dv_table[pkg_in.source].cost[i] = pkg_in.dv[pkg_in.source].cost[i];
+        if(dv_table[pkg_in.source].cost[i] == INF)
+          dv_table[id].cost[i] == INF;
+        if(dv_table[id].cost[i] > dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source]){
+          dv_table[id].cost[i] = dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source];
+          r_table[i].cost = dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source];
+          r_table[i].next = pkg_in.source;
           dv_changed = TRUE;
         }
       }
@@ -88,10 +75,35 @@ void *receive_dv(void *n){
   }
 }
 
+void *send_msg(void *n){
+  Package msg;
+  int next;
+
+  while(1){
+    if(msg_flag){
+      pthread_mutex_lock(&send_mutex);
+
+      msg = message_out;
+      next = r_table[message_out.destination].next;
+
+      si_other.sin_port = htons(n_table[next].port);
+
+      if(inet_aton(n_table[next].ip, &si_other.sin_addr) == 0)
+        die("Erro na obtenção do IP do destino (Mensagem)\n");
+      else
+      if(sendto(sckt, &msg, sizeof(msg), 0, (struct sockaddr*) &si_other, sizeof(si_other)) == -1)
+        die("Erro ao enviar mensagem\n");
+
+      msg_flag = 0;
+
+      pthread_mutex_unlock(&send_mutex);
+    }
+  }
+}
+
 void transfer_dv(char why){
   Package msg;
 
-  printf("\n");
   for(int n_id = 0; n_id < MAX_ROT; n_id++){
     if(n_table[n_id].port != -1){
       msg = create_message(DIST_VECTOR, n_id);
@@ -105,9 +117,8 @@ void transfer_dv(char why){
       else
       if(why == 'C')
         printf("Roteador %d enviando vetores distância para roteador %d. Houve mudança na tabela de roteamento.\n", id, n_id);
-      else
-        printf("Roteador %d enviando vetores distância para roteador %d. Passaram %d segundos.\n", id, n_id, SEND_TIME);
-
+      // else
+      //   printf("Roteador %d enviando vetores distância para roteador %d. Passaram %d segundos.\n", id, n_id, SEND_TIME);
     }
   }
 }
@@ -132,6 +143,29 @@ void *send_dv(void *n){
       timer = time(0);
     }
     pthread_mutex_unlock(&send_mutex);
+  }
+}
+
+void *check_alive(void *n){
+  time_t timer;
+
+  timer = time(0);
+
+  while(1){
+    if(difftime(time(0), timer) >= 10){
+      pthread_mutex_lock(&send_mutex);
+      for(int i = 0; i < MAX_ROT; i++){
+        if(alive_flag[i] != 1 && n_table[i].port != -1){
+          dv_table[id].cost[i] = INF;
+          dv_table[i].cost[id] = INF;
+          n_table[i].port = -1;
+          dv_changed = TRUE;
+        }
+      }
+      memset(alive_flag, 0, sizeof(alive_flag));
+      pthread_mutex_unlock(&send_mutex);
+      timer = time(0);
+    }
   }
 }
 
@@ -243,10 +277,14 @@ int main(int argc, char *argv[]){
   r_table[id].cost = 0;
   r_table[id].next = id;
 
+  memset(alive_flag, 0, sizeof(alive_flag));
+
   start_topology(id);
 
-  pthread_create(&receive_vector, NULL, receive_dv, NULL);
+  pthread_create(&receive, NULL, receive_pkg, NULL);
   pthread_create(&send_vector, NULL, send_dv, NULL);
+  pthread_create(&send_message, NULL, send_msg, NULL);
+  pthread_create(&still_alive, NULL, check_alive, NULL);
 
   while(1){
     system("clear");
@@ -264,15 +302,26 @@ int main(int argc, char *argv[]){
     scanf("%d", &opt);
     switch(opt){
       case 1:
+        system("clear");
+        for(int i = 0; i <= message_control_in; i++){
+          if(i < message_control_in){
+            printf("Mensagem #%d recebida de %d\n", message_in[i].msg_id, message_in[i].source);
+            printf("- %s\n", message_in[i].content);
+          }
+        }
+        printf("Pressione ENTER para prosseguir!");
+        getchar();
+        getchar();
         break;
       case 2:
         do{
           printf("\nDigite o roteador de destino: ");
           scanf("%d", &destination);
           if(destination < 0 || destination >= MAX_ROT)
-            printf("Roteador informado não existe!\n\n");
+            printf("Roteador informado não existe!\n");
         }while(destination < 0 || destination >= MAX_ROT);
-        create_message(MESSAGE, destination);
+        message_out = create_message(MESSAGE, destination);
+        msg_flag = 1;
         break;
       case 3:
         break;
