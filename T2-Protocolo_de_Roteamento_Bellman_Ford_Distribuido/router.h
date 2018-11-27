@@ -41,6 +41,6 @@ typedef struct{                     // Estrutura das tabelas de roteamentos
 }Table;
 
 typedef struct{
-  int port;
+  int port, cost;
   char ip[30];
 }Neighbors;
