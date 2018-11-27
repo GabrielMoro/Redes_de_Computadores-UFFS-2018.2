@@ -168,6 +168,7 @@ void *check_alive(void *n){
           dv_table[i].cost[id] = INF;
           n_table[i].cost = INF;
           r_table[i].next = -1;
+          r_table[i].cost = INF;
           dv_changed = TRUE;
         }
       }
@@ -309,8 +310,8 @@ int main(int argc, char *argv[]){
     printf("----------------------------------------\n");
     printf("1 - Ver histórico de mensagens\n");
     printf("2 - Enviar mensagem\n");
-    printf("3 - Criar enlace\n");
-    printf("4 - Remover enlace\n");
+    printf("3 - Alterar custo de um enlace\n");
+    printf("4 - Remover enlace (Por Fazer)\n");
     printf("5 - Mostar vetores distancia\n");
     printf("0 - Sair\n");
     printf("----------------------------------------\n");
@@ -353,7 +354,10 @@ int main(int argc, char *argv[]){
           printf("\n");
           for(int j = 0; j < MAX_ROT; j++)
             if(n_table[i].cost != INF || i == id)
-              printf("Origem: %d para destino: %d, com custo = %d\n", i, j, dv_table[i].cost[j]); // , next = %d , r_table[j].next
+              if(dv_table[i].cost[j] != INF)
+                printf("Origem: %d para destino: %d, com custo = %d\n", i, j, dv_table[i].cost[j]); // , next = %d , r_table[j].next
+              else
+                printf("Origem: %d para destino: %d, com custo = INF\n", i, j);
             else{
               printf("Não possui os vetores de %d\n", i);
               break;
@@ -366,7 +370,10 @@ int main(int argc, char *argv[]){
       case 6:
         printf("\nTabela de roteamento do roteador %d\n\n", id);
         for(int i = 0; i < MAX_ROT; i++)
-          printf("Para %d - Próximo: %d, com custo: %d\n", i, r_table[i].next, r_table[i].cost);
+          if(r_table[i].cost != INF)
+            printf("Para %d - Próximo: %2d, com custo: %d\n", i, r_table[i].next, r_table[i].cost);
+          else
+            printf("Para %d - Próximo: %2d, com custo: INF\n", i, r_table[i].next);
 
           printf("\nPressione ENTER para prosseguir!");
           getchar();
