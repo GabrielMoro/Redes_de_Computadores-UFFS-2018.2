@@ -61,10 +61,16 @@ void *receive_pkg(void *n){
     }else if(pkg_in.type == DIST_VECTOR){
       alive_flag[pkg_in.source] = 1;
       for(int i = 0; i < MAX_ROT; i++){
+        if(pkg_in.dv[pkg_in.source].cost[i] == INF && r_table[i].next == pkg_in.source){
+          dv_table[id].cost[i] = INF;
+          dv_table[i].cost[id] = INF;
+          r_table[i].next = -1;
+          dv_changed = TRUE;
+        }
+
         dv_table[pkg_in.source].cost[i] = pkg_in.dv[pkg_in.source].cost[i];
-        if(dv_table[pkg_in.source].cost[i] == INF)
-          dv_table[id].cost[i] == INF;
-        if(dv_table[id].cost[i] > dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source]){
+
+        if(dv_table[id].cost[i] > dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source] && dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source] <= INF){
           dv_table[id].cost[i] = dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source];
           r_table[i].cost = dv_table[pkg_in.source].cost[i] + dv_table[id].cost[pkg_in.source];
           r_table[i].next = pkg_in.source;
@@ -105,7 +111,7 @@ void transfer_dv(char why){
   Package msg;
 
   for(int n_id = 0; n_id < MAX_ROT; n_id++){
-    if(n_table[n_id].port != -1){
+    if(n_table[n_id].cost != INF && n_table[n_id].port != -1){
       msg = create_message(DIST_VECTOR, n_id);
       si_other.sin_port = htons(n_table[n_id].port);
 
@@ -116,7 +122,7 @@ void transfer_dv(char why){
         die("Erro ao enviar vetores distância\n");
       else
       if(why == 'C')
-        printf("Roteador %d enviando vetores distância para roteador %d. Houve mudança na tabela de roteamento.\n", id, n_id);
+        printf("\nRoteador %d enviando vetores distância para roteador %d. Houve mudança na tabela de roteamento.\n", id, n_id);
       // else
       //   printf("Roteador %d enviando vetores distância para roteador %d. Passaram %d segundos.\n", id, n_id, SEND_TIME);
     }
@@ -152,13 +158,16 @@ void *check_alive(void *n){
   timer = time(0);
 
   while(1){
-    if(difftime(time(0), timer) >= 10){
+    if(difftime(time(0), timer) >= 3*SEND_TIME){
       pthread_mutex_lock(&send_mutex);
       for(int i = 0; i < MAX_ROT; i++){
-        if(alive_flag[i] != 1 && n_table[i].port != -1){
+        if(alive_flag[i] != 1 && i != id && n_table[i].cost != INF){
+          for(int j = 0; j < MAX_ROT; j++)
+            dv_table[id].cost[j] = n_table[j].cost;
           dv_table[id].cost[i] = INF;
           dv_table[i].cost[id] = INF;
-          n_table[i].port = -1;
+          n_table[i].cost = INF;
+          r_table[i].next = -1;
           dv_changed = TRUE;
         }
       }
@@ -185,6 +194,7 @@ void start_topology(int r_id){
             strcpy(n_table[y].ip, ip);
             r_table[y].next = y;
             r_table[y].cost = w;
+            n_table[y].cost = w;
             dv_table[r_id].cost[y] = w;
             continue;
           }
@@ -195,6 +205,7 @@ void start_topology(int r_id){
             strcpy(n_table[x].ip, ip);
             r_table[x].next = x;
             r_table[x].cost = w;
+            n_table[x].cost = w;
             dv_table[r_id].cost[x] = w;
           }
         }
@@ -267,12 +278,17 @@ int main(int argc, char *argv[]){
 
   for(int i = 0; i < MAX_ROT; i++){
     n_table[i].port = -1;
+    n_table[i].cost = INF;
     r_table[i].cost = INF;
     r_table[i].next = -1;
-    for(int j = 0; j < MAX_ROT; j++)
+    for(int j = 0; j < MAX_ROT; j++){
       dv_table[i].cost[j] = INF;
+      if(r_table[j].next == i)
+        r_table[j].next = -1;
+    }
   }
 
+  n_table[id].cost = 0;
   dv_table[id].cost[id] = 0;
   r_table[id].cost = 0;
   r_table[id].next = id;
@@ -319,7 +335,11 @@ int main(int argc, char *argv[]){
           scanf("%d", &destination);
           if(destination < 0 || destination >= MAX_ROT)
             printf("Roteador informado não existe!\n");
-        }while(destination < 0 || destination >= MAX_ROT);
+          if(r_table[destination].next == -1)
+            printf("Não há como chegar em %d\n", destination);
+          if(destination == id)
+            printf("Escolha um roteador que não seja este\n");
+        }while(destination < 0 || destination >= MAX_ROT || r_table[destination].next == -1 || destination == id);
         message_out = create_message(MESSAGE, destination);
         msg_flag = 1;
         break;
@@ -328,10 +348,16 @@ int main(int argc, char *argv[]){
       case 4:
         break;
       case 5:
+        system("clear");
         for(int i = 0; i < MAX_ROT; i++){
           printf("\n");
           for(int j = 0; j < MAX_ROT; j++)
-            printf("Origem: %d para destino: %d, com custo = %d\n", i, j, dv_table[i].cost[j]);
+            if(n_table[i].cost != INF || i == id)
+              printf("Origem: %d para destino: %d, com custo = %d\n", i, j, dv_table[i].cost[j]); // , next = %d , r_table[j].next
+            else{
+              printf("Não possui os vetores de %d\n", i);
+              break;
+            }
         }
         printf("\nPressione ENTER para prosseguir!");
         getchar();
