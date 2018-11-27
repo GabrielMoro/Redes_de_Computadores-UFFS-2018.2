@@ -310,8 +310,8 @@ int main(int argc, char *argv[]){
     printf("----------------------------------------\n");
     printf("1 - Ver histórico de mensagens\n");
     printf("2 - Enviar mensagem\n");
-    printf("3 - Alterar custo de um enlace\n");
-    printf("4 - Remover enlace (Por Fazer)\n");
+    printf("3 - Alterar custo de um enlace (Por Fazer)\n");
+    printf("4 - Remover enlace             (Por Fazer)\n");
     printf("5 - Mostar vetores distancia\n");
     printf("0 - Sair\n");
     printf("----------------------------------------\n");
