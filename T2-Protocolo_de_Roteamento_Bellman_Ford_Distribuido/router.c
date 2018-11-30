@@ -1,7 +1,7 @@
 #include "router.h"
 
 Router router;
-Table r_table[MAX_ROT];                                      // Tabela de roteamento
+Table r_table[MAX_ROT];                       // Tabela de roteamento
 Neighbors n_table[MAX_ROT];
 Dist_Vector dv_table[MAX_ROT];
 Package message_in[QUEUE_SIZE], message_out;  // Filas do roteador
@@ -310,9 +310,8 @@ int main(int argc, char *argv[]){
     printf("----------------------------------------\n");
     printf("1 - Ver histórico de mensagens\n");
     printf("2 - Enviar mensagem\n");
-    printf("3 - Alterar custo de um enlace (Por Fazer)\n");
-    printf("4 - Remover enlace             (Por Fazer)\n");
-    printf("5 - Mostar vetores distancia\n");
+    printf("3 - Mostar vetores distancia\n");
+    printf("4 - Mostar tabela de roteamento\n");
     printf("0 - Sair\n");
     printf("----------------------------------------\n");
     printf("Opção: ");
@@ -345,10 +344,6 @@ int main(int argc, char *argv[]){
         msg_flag = 1;
         break;
       case 3:
-        break;
-      case 4:
-        break;
-      case 5:
         system("clear");
         for(int i = 0; i < MAX_ROT; i++){
           printf("\n");
@@ -367,7 +362,8 @@ int main(int argc, char *argv[]){
         getchar();
         getchar();
         break;
-      case 6:
+      case 4:
+        system("clear");
         printf("\nTabela de roteamento do roteador %d\n\n", id);
         for(int i = 0; i < MAX_ROT; i++)
           if(r_table[i].cost != INF)
