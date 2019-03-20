@@ -10,7 +10,7 @@
 #define MESSAGE_SIZE 100           // Mensagens são limitadas a 100 caracteres
 #define MAX_ROT 4
 #define INF 20
-#define SEND_TIME 5
+#define SEND_TIME 3
 
 #define MESSAGE 0
 #define DIST_VECTOR 1
